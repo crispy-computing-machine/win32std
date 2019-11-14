@@ -71,12 +71,12 @@ ZEND_MINFO_FUNCTION(win32std);
 
 
  /* Res functions */
-ZEND_FUNCTION(res_get);
-ZEND_FUNCTION(res_list);
-ZEND_FUNCTION(res_list_type);
-ZEND_FUNCTION(res_open);
-ZEND_FUNCTION(res_close);
-ZEND_FUNCTION(res_set);
+PHP_FUNCTION(res_get);
+PHP_FUNCTION(res_list);
+PHP_FUNCTION(res_list_type);
+PHP_FUNCTION(res_open);
+PHP_FUNCTION(res_close);
+PHP_FUNCTION(res_set);
 
 
  /* Res stream */
@@ -87,23 +87,23 @@ void _php_res_destruction_handler(zend_resource *rsrc TSRMLS_DC);
 
 
  /* Win32 wrapper functions   */
-ZEND_FUNCTION(win_shell_exec);
-ZEND_FUNCTION(win_play_wav);
-ZEND_FUNCTION(win_beep);
-ZEND_FUNCTION(win_create_link);
-ZEND_FUNCTION(win_message_box);
-ZEND_FUNCTION(win_browse_folder);
-ZEND_FUNCTION(win_browse_file);
+PHP_FUNCTION(win_shell_exec);
+PHP_FUNCTION(win_play_wav);
+PHP_FUNCTION(win_beep);
+PHP_FUNCTION(win_create_link);
+PHP_FUNCTION(win_message_box);
+PHP_FUNCTION(win_browse_folder);
+PHP_FUNCTION(win_browse_file);
 
 
  /* Registry functions */
-ZEND_FUNCTION(reg_create_key);
-ZEND_FUNCTION(reg_open_key);
-ZEND_FUNCTION(reg_close_key);
-ZEND_FUNCTION(reg_enum_key);
-ZEND_FUNCTION(reg_enum_value);
-ZEND_FUNCTION(reg_get_value);
-ZEND_FUNCTION(reg_set_value);
+PHP_FUNCTION(reg_create_key);
+PHP_FUNCTION(reg_open_key);
+PHP_FUNCTION(reg_close_key);
+PHP_FUNCTION(reg_enum_key);
+PHP_FUNCTION(reg_enum_value);
+PHP_FUNCTION(reg_get_value);
+PHP_FUNCTION(reg_set_value);
 
 
  /* Win32 STD API functions that call C++ Object */
