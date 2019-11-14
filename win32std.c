@@ -246,7 +246,7 @@ PHP_FUNCTION(win_browse_folder)
     open or save dialog box, starting path, default filename, default extension, filter in MS format 
     Filter exemple: "HTML File\0*.htm;*.html\0INI file\0*.ini\0All files\0*.*\0\0"
 	or: array( "HTML File" => "*.htm;*.html", "INI File" => "*.ini", "All file" => "*.*" )
-
+*/
 PHP_FUNCTION(win_browse_file)
 {
     char *ext= NULL, *path= NULL, *file= NULL, *key;
@@ -278,13 +278,14 @@ PHP_FUNCTION(win_browse_file)
     ofn.Flags= OFN_CREATEPROMPT|OFN_NOCHANGEDIR|OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST|OFN_HIDEREADONLY;
     //OFN_FILEMUSTEXIST
 
+	/* Filter */
 	free_filter= 0;
 	if( zfilter && Z_TYPE_P(zfilter)==IS_ARRAY ) {
 		not_string= 0;
 		zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(zfilter), &pos);
 		while (zend_hash_get_current_data_ex(Z_ARRVAL_P(zfilter), (void **)&entry, &pos) == SUCCESS) {
 			if( zend_hash_get_current_key_ex(Z_ARRVAL_P(zfilter), &key, &key_len, &key_len, 0, &pos)!=HASH_KEY_IS_STRING ) { not_string= 1; break; }
-			if( Z_TYPE_P(entry) != IS_STRING ) {
+			if( Z_TYPE_P(entry) != IS_STRING ) { /*not_string= 1;*/ 
 				zend_error( E_WARNING, "win_browse_file: filter key '%s' must have a string value", key ); 
 				zend_hash_move_forward_ex(Z_ARRVAL_P(zfilter), &pos);
 				continue; 
@@ -326,8 +327,7 @@ PHP_FUNCTION(win_browse_file)
 		RETVAL_STRING(fileBuffer, 1);
 	}
 }
-*/
-
+/* }}} */
 
 
 
@@ -371,7 +371,7 @@ zend_function_entry win32std_functions[] = {
 	PHP_FE(win_message_box,	NULL)
 	PHP_FE(win_create_link,		NULL)
 	PHP_FE(win_browse_folder,	NULL)
-	#PHP_FE(win_browse_file,		NULL)
+	PHP_FE(win_browse_file,		NULL)
 
 	/* Registry */
 	PHP_FE(reg_close_key,		NULL)
