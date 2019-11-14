@@ -371,7 +371,7 @@ zend_function_entry win32std_functions[] = {
 	ZEND_FE(win_message_box,	NULL)
 	ZEND_FE(win_create_link,		NULL)
 	ZEND_FE(win_browse_folder,	NULL)
-	//ZEND_FE(win_browse_file,		NULL)
+	#ZEND_FE(win_browse_file,		NULL)
 
 	/* Registry */
 	ZEND_FE(reg_close_key,		NULL)
