@@ -59,7 +59,7 @@ const char * win32_strerror( char * buffer, long buffer_len)
 
 #define SHELL_EXEC_ERROR(err) case err: zend_error( E_WARNING, "Unable to execute shell [%s] on '%s' (%s)", action, file, #err ); break;
 
-PHP_FUNCTION(win_shell_execute)
+ZEND_FUNCTION(win_shell_execute)
 {
 	char *action= NULL, *file= NULL, *args=NULL, *dir=NULL;
 	int  action_len= 4, file_len=0, args_len=0, dir_len=0, ret;
@@ -101,7 +101,7 @@ PHP_FUNCTION(win_shell_execute)
 	loop can be set to loop playback (default to false)
 	module may be opened by res_open a file must represent the resource id (NOT IMPL)
 */
-PHP_FUNCTION(win_play_wav)
+ZEND_FUNCTION(win_play_wav)
 {
 	char *file= NULL;
 	int  file_len=0;
@@ -137,7 +137,7 @@ PHP_FUNCTION(win_play_wav)
         '1': System Default 
         '0': Standard beep using the computer speaker
 */
-PHP_FUNCTION(win_beep)
+ZEND_FUNCTION(win_beep)
 {
 	UINT beep_type;
 	char * str= "";
@@ -180,7 +180,7 @@ PHP_FUNCTION(win_beep)
    Create a MS link file (.lnk) 
    Don't forget the .lnk at the end of link_file !
 */
-PHP_FUNCTION(win_create_link)
+ZEND_FUNCTION(win_create_link)
 {
     char *file, *link, *args=NULL, *descr=NULL, *workingdir=NULL;
     int file_len, link_len, args_len, descr_len, workingdir_len;
@@ -201,7 +201,7 @@ PHP_FUNCTION(win_create_link)
    Prompt a typical Win32 message box.
    Use the Messages Box Constants to modify the appearance of the message box
 */
-PHP_FUNCTION(win_message_box)
+ZEND_FUNCTION(win_message_box)
 {
     char *text, *caption= "PHP";
     int text_len, caption_len, type=MB_OK;
@@ -219,7 +219,7 @@ PHP_FUNCTION(win_message_box)
 /* {{{ proto int win_browse_folder( [string dir, string caption=""] )
    Prompt a "browse for folder" message box
 */
-PHP_FUNCTION(win_browse_folder)
+ZEND_FUNCTION(win_browse_folder)
 {
     char *dir=NULL, *caption=NULL, system_dir[MAX_PATH+1]= "";
     int dir_len, caption_len;
@@ -247,7 +247,7 @@ PHP_FUNCTION(win_browse_folder)
     Filter exemple: "HTML File\0*.htm;*.html\0INI file\0*.ini\0All files\0*.*\0\0"
 	or: array( "HTML File" => "*.htm;*.html", "INI File" => "*.ini", "All file" => "*.*" )
 
-PHP_FUNCTION(win_browse_file)
+ZEND_FUNCTION(win_browse_file)
 {
     char *ext= NULL, *path= NULL, *file= NULL, *key;
     int open=1, ext_len, path_len, file_len, free_filter= 0, key_len, not_string;
@@ -357,30 +357,30 @@ ZEND_DECLARE_MODULE_GLOBALS(win32std)
 zend_function_entry win32std_functions[] = {
 
 	/* Res */
-	PHP_FE(res_get,			NULL)
-	PHP_FE(res_list,		    NULL)
-	PHP_FE(res_list_type,	NULL)
-	PHP_FE(res_open,		NULL)
-	PHP_FE(res_close,		NULL)
-	PHP_FE(res_set,			NULL)
+	ZEND_FE(res_get,			NULL)
+	ZEND_FE(res_list,		    NULL)
+	ZEND_FE(res_list_type,	NULL)
+	ZEND_FE(res_open,		NULL)
+	ZEND_FE(res_close,		NULL)
+	ZEND_FE(res_set,			NULL)
 
 	/* Win32 */
-	PHP_FE(win_shell_execute,	NULL)
-	PHP_FE(win_play_wav,		NULL)
-	PHP_FE(win_beep,			    NULL)
-	PHP_FE(win_message_box,	NULL)
-	PHP_FE(win_create_link,		NULL)
-	PHP_FE(win_browse_folder,	NULL)
-	#PHP_FE(win_browse_file,		NULL)
+	ZEND_FE(win_shell_execute,	NULL)
+	ZEND_FE(win_play_wav,		NULL)
+	ZEND_FE(win_beep,			    NULL)
+	ZEND_FE(win_message_box,	NULL)
+	ZEND_FE(win_create_link,		NULL)
+	ZEND_FE(win_browse_folder,	NULL)
+	#ZEND_FE(win_browse_file,		NULL)
 
 	/* Registry */
-	PHP_FE(reg_close_key,		NULL)
-	PHP_FE(reg_create_key,		NULL)
-	PHP_FE(reg_enum_key,	    NULL)
-	PHP_FE(reg_enum_value,	    NULL)
-	PHP_FE(reg_open_key,		NULL)
-	PHP_FE(reg_set_value,		NULL)
-	PHP_FE(reg_get_value,	NULL)
+	ZEND_FE(reg_close_key,		NULL)
+	ZEND_FE(reg_create_key,		NULL)
+	ZEND_FE(reg_enum_key,	    NULL)
+	ZEND_FE(reg_enum_value,	    NULL)
+	ZEND_FE(reg_open_key,		NULL)
+	ZEND_FE(reg_set_value,		NULL)
+	ZEND_FE(reg_get_value,	NULL)
 
     {NULL, NULL, NULL}	/* Must be the last line in win32std_functions[] */
 };
@@ -598,7 +598,7 @@ ZEND_MINFO_FUNCTION(win32std)
 /* Every user-visible function in PHP should document itself in the source */
 /* {{{ proto string confirm_win32std_compiled(string arg)
    Return a string to confirm that the module is compiled in */
-PHP_FUNCTION(confirm_win32std_compiled)
+ZEND_FUNCTION(confirm_win32std_compiled)
 {
 	char *arg = NULL;
 	int arg_len, len;
