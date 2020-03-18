@@ -252,22 +252,32 @@ PHP_FUNCTION(res_list)
 
     zend_fetch_resource2_ex(h_module, &res_rc, -1, le_res_resource_name, le_res_resource);
 
-	if( !type || !type[0] ) RETURN_FALSE;
-	if( *type=='#' )
+	if( !type || !type[0] ) {
+        RETURN_FALSE;
+	}
+
+	if( *type=='#' ) {
 		sscanf( type, "#%x", &int_type );
-	if( !strncmp( type, "RT_", 3 ) )
+	}
+
+	if( !strncmp( type, "RT_", 3 ) ){
 		int_type = php_res_list_get_int_type( type );
+	}
 
 	if( !array_init( return_value ) ) 	{
-		if( int_type==-1 )
+		if( int_type==-1 ) {
 			ret= EnumResourceNames( h_module, type, php_res_list_callback, (LONG)return_value );
-		else
+		} else {
 			ret= EnumResourceNames( h_module, MAKEINTRESOURCE(int_type), php_res_list_callback, (LONG)return_value );
+		}
 		if( !ret ) 	{
-			if(	GetLastError()!=1813 ) // No resource of this type
-				{ zend_error(E_WARNING, "res_list_type %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE; }
-			else
+
+		    // No resource of this type
+			if(	GetLastError()!=1813 ) {
+			    zend_error(E_WARNING, "res_list_type %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE;
+			} else {
 				ret= TRUE;
+			}
 		}
 	}
 
