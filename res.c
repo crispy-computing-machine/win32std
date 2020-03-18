@@ -264,22 +264,23 @@ PHP_FUNCTION(res_list)
 		int_type = php_res_list_get_int_type( type );
 	}
 
-	if( !array_init( return_value ) ) 	{
-		if( int_type==-1 ) {
-			ret= EnumResourceNames( h_module, type, php_res_list_callback, (LONG)return_value );
-		} else {
-			ret= EnumResourceNames( h_module, MAKEINTRESOURCE(int_type), php_res_list_callback, (LONG)return_value );
-		}
-		if( !ret ) 	{
+    array_init( return_value );
 
-		    // No resource of this type
-			if(	GetLastError()!=1813 ) {
-			    zend_error(E_WARNING, "res_list_type %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE;
-			} else {
-				ret= TRUE;
-			}
-		}
-	}
+    if( int_type==-1 ) {
+        ret = EnumResourceNames( h_module, type, php_res_list_callback, (LONG)return_value );
+    } else {
+        ret = EnumResourceNames( h_module, MAKEINTRESOURCE(int_type), php_res_list_callback, (LONG)return_value );
+    }
+
+    if( !ret ) 	{
+
+        // No resource of this type
+        if(	GetLastError()!=1813 ) {
+            zend_error(E_WARNING, "res_list_type %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE;
+        } else {
+            ret= TRUE;
+        }
+    }
 
 	if( !ret ){
 		RETURN_FALSE;
@@ -376,17 +377,17 @@ PHP_FUNCTION(res_list_type)
 
     zend_fetch_resource2_ex(h_module, &res_rc, -1, le_res_resource_name, le_res_resource);
 
-	if( !array_init( return_value ) ) {
-		if( !as_string ) {
-			ret= EnumResourceTypes( h_module, php_res_list_type_callback, (LONG)return_value );
-		}  else {
-			ret= EnumResourceTypes( h_module, php_res_list_type_string_callback, (LONG)return_value );
-		}
+    array_init( return_value );
 
-		if( !ret ) {
-			zend_error(E_WARNING, "res_list_type %d - %s", GetLastError(), win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE;
-        }
-	}
+    if( !as_string ) {
+        ret = EnumResourceTypes( h_module, php_res_list_type_callback, (LONG)return_value );
+    }  else {
+        ret = EnumResourceTypes( h_module, php_res_list_type_string_callback, (LONG)return_value );
+    }
+
+    if( !ret ) {
+        zend_error(E_WARNING, "res_list_type %d - %s", GetLastError(), win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE;
+    }
 
 	if( !ret ) {
 		RETURN_FALSE;
