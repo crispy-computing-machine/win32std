@@ -246,15 +246,17 @@ PHP_FUNCTION(res_list)
     char buffer[WIN32_STRERROR_BUFFER_LEN];
     zval * res_rc;
 
-	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res_rc, &type, &type_len ) == FAILURE ) 
+	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res_rc, &type, &type_len ) == FAILURE ) {
 		RETURN_FALSE;
+	}
+
     zend_fetch_resource2_ex(h_module, &res_rc, -1, le_res_resource_name, le_res_resource);
 
 	if( !type || !type[0] ) RETURN_FALSE;
 	if( *type=='#' )
 		sscanf( type, "#%x", &int_type );
 	if( !strncmp( type, "RT_", 3 ) )
-		int_type= php_res_list_get_int_type( type );
+		int_type = php_res_list_get_int_type( type );
 
 	if( !array_init( return_value ) ) 	{
 		if( int_type==-1 )
@@ -269,8 +271,9 @@ PHP_FUNCTION(res_list)
 		}
 	}
 
-	if( !ret )
+	if( !ret ){
 		RETURN_FALSE;
+	}
 }
 /* }}} */
 
@@ -357,21 +360,26 @@ PHP_FUNCTION(res_list_type)
     char buffer[WIN32_STRERROR_BUFFER_LEN];
     zval *res_rc;
 
-	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r|b", &res_rc, &as_string ) == FAILURE ) 
-		RETURN_FALSE;
+	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r|b", &res_rc, &as_string ) == FAILURE ) {
+        RETURN_FALSE;
+	}
+
     zend_fetch_resource2_ex(h_module, &res_rc, -1, le_res_resource_name, le_res_resource);
 
 	if( !array_init( return_value ) ) {
-		if( !as_string )
+		if( !as_string ) {
 			ret= EnumResourceTypes( h_module, php_res_list_type_callback, (LONG)return_value );
-		else
+		}  else {
 			ret= EnumResourceTypes( h_module, php_res_list_type_string_callback, (LONG)return_value );
+		}
 
-		if( !ret )
-			{ zend_error(E_WARNING, "res_list_type %d - %s", GetLastError(), win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE; }
+		if( !ret ) {
+			zend_error(E_WARNING, "res_list_type %d - %s", GetLastError(), win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE;
+        }
 	}
 
-	if( !ret )
+	if( !ret ) {
 		RETURN_FALSE;
+	}
 }
 /* }}} */
