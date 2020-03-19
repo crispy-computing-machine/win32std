@@ -1,4 +1,5 @@
 <?
+    // err
 	function err( $txt ) { echo "ERROR: ".$txt."\n"; exit; }
 
 
