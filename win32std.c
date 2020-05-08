@@ -284,7 +284,7 @@ PHP_FUNCTION(win_browse_file)
 		not_string= 0;
 		zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(zfilter), &pos);
 		while (zend_hash_get_current_data_ex(Z_ARRVAL_P(zfilter), &pos) == SUCCESS) {
-			if( zend_hash_get_current_key_ex(Z_ARRVAL_P(zfilter), &key, &key_len, &key_len, 0, &pos)!=HASH_KEY_IS_STRING ) { not_string= 1; break; }
+			if( zend_hash_get_current_key_ex(Z_ARRVAL_P(zfilter), &key, &key_len, &key_len, &pos)!=HASH_KEY_IS_STRING ) { not_string= 1; break; }
 			if( Z_TYPE_P(entry) != IS_STRING ) { /*not_string= 1;*/ 
 				zend_error( E_WARNING, "win_browse_file: filter key '%s' must have a string value", key ); 
 				zend_hash_move_forward_ex(Z_ARRVAL_P(zfilter), &pos);
@@ -324,7 +324,7 @@ PHP_FUNCTION(win_browse_file)
 		RETURN_NULL();
 	}
 	else {
-		RETVAL_STRING(fileBuffer, 1);
+		RETVAL_STRING(fileBuffer);
 	}
 }
 /* }}} */
