@@ -81,10 +81,7 @@ int win_browse_folder( [string dir, string caption=""] )
 
 string win_browse_file( [open, path, filename, ext, filter] )
     open or save dialog box, starting path, default filename, default extension, filter in MS format 
-    Filter exemple: 
-		"HTML File\0*.htm;*.html\0INI file\0*.ini\0All files\0*.*\0\0"
-     or: 
-		array( "HTML File" => "*.htm;*.html", "INI File" => "*.ini", "All file" => "*.*" )
+    Filter exemple: "HTML File\0*.htm;*.html\0INI file\0*.ini\0All files\0*.*\0\0"
 
 
 resource reg_open_key(mixed hKey, string subkey [, int samDesired = KEY_ALL_ACCESS])

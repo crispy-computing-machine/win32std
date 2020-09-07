@@ -25,13 +25,13 @@
 #include "php_ini.h"
 #include "zend_list.h"
 #include "ext/standard/info.h"
-#include "ext/standard/php_smart_string.h"
+#include <mmsystem.h>
+#include <dsound.h>
+#include <Commdlg.h>
 
 
 extern zend_module_entry win32std_module_entry;
 #define phpext_win32std_ptr &win32std_module_entry
-
-#define PHP_WIN32STD_VERSION "1.0.1-dev"
 
 #ifdef PHP_WIN32
 #define PHP_WIN32STD_API __declspec(dllexport)

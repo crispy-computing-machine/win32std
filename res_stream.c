@@ -24,7 +24,7 @@ typedef struct _res_stream_data{
 	HMODULE		module;
 	char		*data;
     size_t		size;
-    size_t		pos;
+	size_t		pos;
 } res_stream_data;
 
 
