@@ -268,20 +268,24 @@ PHP_FUNCTION(res_list)
 		int_type= php_res_list_get_int_type( type );
 
 	if( !array_init( return_value ) ) 	{
-		if( int_type==-1 )
+		if( int_type==-1 ){
 			ret= EnumResourceNames( h_module, type, php_res_list_callback, (LONG)return_value );
-		else
+		} else {
 			ret= EnumResourceNames( h_module, MAKEINTRESOURCE(int_type), php_res_list_callback, (LONG)return_value );
+		}
 		if( !ret ) 	{
-			if(	GetLastError()!=1813 ) // No resource of this type
-				{ zend_error(E_WARNING, "res_list_type %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE; }
-			else
+		    // No resource of this type
+			if(	GetLastError()!=1813 ){
+			    zend_error(E_WARNING, "res_list_type %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE;
+			} else {
 				ret= TRUE;
+			}
 		}
 	}
 
-	if( !ret )
+	if( !ret ){
 		RETURN_FALSE;
+	}
 }
 /* }}} */
 
@@ -368,23 +372,28 @@ PHP_FUNCTION(res_list_type)
     char buffer[WIN32_STRERROR_BUFFER_LEN];
     zval *res_rc;
 
-	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r|b", &res_rc, &as_string ) == FAILURE )
+	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r|b", &res_rc, &as_string ) == FAILURE ){
 		RETURN_FALSE;
-    if((h_module = (HMODULE) zend_fetch_resource(Z_RES_P(res_rc), le_res_resource_name, le_res_resource)) == NULL)
-    	RETURN_FALSE
-
-
-	if( !array_init( return_value ) ) {
-		if( !as_string )
-			ret= EnumResourceTypes( h_module, php_res_list_type_callback, (LONG)return_value );
-		else
-			ret= EnumResourceTypes( h_module, php_res_list_type_string_callback, (LONG)return_value );
-
-		if( !ret )
-			{ zend_error(E_WARNING, "res_list_type %d - %s", GetLastError(), win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE; }
 	}
 
-	if( !ret )
+    if((h_module = (HMODULE) zend_fetch_resource(Z_RES_P(res_rc), le_res_resource_name, le_res_resource)) == NULL){
+    	RETURN_FALSE
+    }
+
+	if( !array_init( return_value ) ) {
+		if( !as_string ){
+			ret= EnumResourceTypes( h_module, php_res_list_type_callback, (LONG)return_value );
+		} else {
+			ret= EnumResourceTypes( h_module, php_res_list_type_string_callback, (LONG)return_value );
+		}
+
+		if( !ret ) {
+			zend_error(E_WARNING, "res_list_type %d - %s", GetLastError(), win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN)); RETURN_FALSE;
+		}
+	}
+
+	if( !ret ){
 		RETURN_FALSE;
+	}
 }
 /* }}} */
