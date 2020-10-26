@@ -14,6 +14,8 @@
   +----------------------------------------------------------------------+
   | Author: Frank M. Kromann <frank@kromann.info>                        |
   +----------------------------------------------------------------------+
+
+  $Id: header,v 1.10 2002/02/28 08:25:27 sebastian Exp $
 */
 
 
@@ -38,11 +40,12 @@ void php_hkey_close(zend_resource *rsrc TSRMLS_DC)
 	efree(hKey);
 }
 
-static HKEY _registry_get_hkey(zval *zhKey TSRMLS_DC) {
+static HKEY _registry_get_hkey(zval **zhKey TSRMLS_DC) {
 	HKEY hKey;
-	switch (Z_TYPE_P(zhKey)) {
+
+	switch (Z_TYPE_P(*zhKey)) {
 		case IS_LONG :
-			switch (Z_LVAL_P(zhKey)) {
+			switch (Z_LVAL_P(*zhKey)) {
 				case 0 :
 					hKey = HKEY_CLASSES_ROOT;
 					break;
@@ -62,9 +65,9 @@ static HKEY _registry_get_hkey(zval *zhKey TSRMLS_DC) {
 			break;
 		case IS_RESOURCE :
 			{
-				registry_hkey *open_hkey;
+			    registry_hkey *open_hkey;
 
-				open_hkey = (registry_hkey *) zend_fetch_resource2(zhKey TSRMLS_CC, -1, le_key_resource_name, NULL, 1, le_key);
+				open_hkey = (registry_hkey *) zend_fetch_resource(Z_RES_P(*zhKey), le_key_resource_name, le_key);
 				if (open_hkey)
 					hKey = open_hkey->hKey;
 				else
@@ -72,7 +75,7 @@ static HKEY _registry_get_hkey(zval *zhKey TSRMLS_DC) {
 			}
 			break;
 		default :
-			hKey = NULL;
+		    hKey = NULL;
 			break;
 	}
 
@@ -90,9 +93,12 @@ PHP_FUNCTION(reg_close_key)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &zhKey) == FAILURE) {
 		return;
 	}
-	zend_fetch_resource(reg_hkey, &zhKey, -1, le_key_resource_name, le_key);
 
-	zend_list_delete(Z_RES_P(zhKey));
+	if ((reg_hkey = (registry_hkey*)zend_fetch_resource(Z_RES_P(zhKey), le_key_resource_name, le_key)) == NULL)
+		return;
+
+
+	zend_list_delete(Z_RES_VAL_P(zhKey));
 }
 /* }}} */
 
@@ -112,7 +118,7 @@ PHP_FUNCTION(reg_create_key)
 	DWORD dwDisposition;
 	LONG rc;
 
-	char buffer[WIN32_STRERROR_BUFFER_LEN];
+    char buffer[WIN32_STRERROR_BUFFER_LEN];
 
 	registry_hkey *reg_hkey;
 
@@ -124,13 +130,13 @@ PHP_FUNCTION(reg_create_key)
 
 	rc = RegCreateKeyEx(hKey, arg, 0, NULL, REG_OPTION_NON_VOLATILE, samDesired, NULL, &hkResult, &dwDisposition);
 	if (rc != ERROR_SUCCESS) {
-		zend_error( E_WARNING, "Can't create registry key: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
+        zend_error( E_WARNING, "Can't create registry key: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
 		RETURN_FALSE;
 	}
 	else {
 		reg_hkey = (registry_hkey *) emalloc(sizeof(registry_hkey));
 		reg_hkey->hKey = hkResult;
-		RETURN_RES(zend_register_resource(reg_hkey, le_key));
+		ZVAL_RES(return_value, zend_register_resource(reg_hkey, le_key));
 	}
 }
 /* }}} */
@@ -169,7 +175,7 @@ PHP_FUNCTION(reg_enum_key)
 	// Return array
 	array_init(return_value);
 	for( index= 0, buf_len = MAX_SUBKEY_LEN; (rc= RegEnumKeyEx(hKey, index, buf, &buf_len, NULL, NULL, NULL, &LastWriteTime))==ERROR_SUCCESS; index++ ) {
-		add_next_index_string( return_value, buf, buf_len+1 );
+		add_next_index_stringl( return_value, buf, buf_len+1 );
 		buf_len = MAX_SUBKEY_LEN;
 	}
 	if( rc!=ERROR_NO_MORE_ITEMS )
@@ -182,7 +188,7 @@ PHP_FUNCTION(reg_enum_key)
 PHP_FUNCTION(reg_enum_value)
 {
 	zval *zhKey;
-	long index = -1;
+	long long index = - 1;
 	char buf[MAX_SUBKEY_LEN];
 	DWORD buf_len = MAX_SUBKEY_LEN;
 	HKEY hKey;
@@ -194,26 +200,33 @@ PHP_FUNCTION(reg_enum_value)
 
 	hKey = _registry_get_hkey(&zhKey TSRMLS_CC);
 
-	if( index>-1 ) {
+	if(index >- 1){
 		rc = RegEnumValue(hKey, index, buf, &buf_len, NULL, NULL, NULL, NULL);
-		if (rc != ERROR_SUCCESS) {
-			if( rc!=ERROR_NO_MORE_ITEMS )
-				zend_error( E_WARNING, "Can't enum registry values: %s", win32_strerror(buf, MAX_SUBKEY_LEN) );
+		if (rc != ERROR_SUCCESS){
+			if(rc != ERROR_NO_MORE_ITEMS){
+				zend_error(E_WARNING, "Can't enum registry values: %s", win32_strerror(buf, MAX_SUBKEY_LEN));
+            }
+
 			RETURN_FALSE;
 		}
 		else {
-			RETURN_STRINGL(buf, buf_len, 1);
+			RETURN_STRINGL(buf, buf_len);
 		}
 	}
 
 	// Return array
 	array_init(return_value);
-	for( index= 0, buf_len = MAX_SUBKEY_LEN; (rc= RegEnumValue(hKey, index, buf, &buf_len, NULL, NULL, NULL, NULL))==ERROR_SUCCESS; index++ ) {
-		add_next_index_string( return_value, buf, buf_len+1 );
+	for(
+        index = 0, buf_len = MAX_SUBKEY_LEN;
+        (rc = RegEnumValue(hKey, index, buf, &buf_len, NULL, NULL, NULL, NULL))==ERROR_SUCCESS;
+        index++
+    ){
+		add_next_index_stringl( return_value, buf, buf_len+1 );
 		buf_len = MAX_SUBKEY_LEN;
 	}
-	if( rc!=ERROR_NO_MORE_ITEMS )
-		zend_error( E_WARNING, "Can't enum registry values: %s", win32_strerror(buf, MAX_SUBKEY_LEN) );
+	if(rc != ERROR_NO_MORE_ITEMS){
+		zend_error(E_WARNING, "Can't enum registry values: %s", win32_strerror(buf, MAX_SUBKEY_LEN));
+    }
 }
 /* }}} */
 
@@ -231,7 +244,7 @@ PHP_FUNCTION(reg_open_key)
 	REGSAM samDesired = KEY_ALL_ACCESS;
 	LONG rc;
 
-	char buffer[WIN32_STRERROR_BUFFER_LEN];
+    char buffer[WIN32_STRERROR_BUFFER_LEN];
 
 	registry_hkey *reg_hkey;
 
@@ -239,17 +252,20 @@ PHP_FUNCTION(reg_open_key)
 		return;
 	}
 
+
+
 	hKey = _registry_get_hkey(&zhKey TSRMLS_CC);
 
 	rc = RegOpenKeyEx(hKey, arg, 0, samDesired, &hkResult);
+
 	if (rc != ERROR_SUCCESS) {
-		zend_error( E_WARNING, "Can't open registry key: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
+        zend_error( E_WARNING, "Can't open registry key: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
 		RETURN_FALSE;
 	}
 	else {
 		reg_hkey = (registry_hkey *) emalloc(sizeof(registry_hkey));
 		reg_hkey->hKey = hkResult;
-		RETURN_RES(zend_register_resource(reg_hkey, le_key));
+		ZVAL_RES(return_value, zend_register_resource(reg_hkey, le_key));
 	}
 }
 /* }}} */
@@ -268,7 +284,7 @@ PHP_FUNCTION(reg_set_value)
 	DWORD cbData;         // size of value data
 	LONG rc;
 
-	char buffer[WIN32_STRERROR_BUFFER_LEN];
+    char buffer[WIN32_STRERROR_BUFFER_LEN];
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zslz", &zhKey, &value_name, &value_len, &value_type, &value) == FAILURE) {
 		return;
@@ -289,13 +305,13 @@ PHP_FUNCTION(reg_set_value)
 			cbData = Z_STRLEN_P(value) + 1;
 			break;
 		default :
-			zend_error( E_WARNING, "registry value type not handled" );
+            zend_error( E_WARNING, "registry value type not handled" );
 			RETURN_FALSE;
 			break;
 	}
 	rc = RegSetValueEx(hKey, value_name, 0, value_type, lpData, cbData);
 	if (rc != ERROR_SUCCESS) {
-		zend_error( E_WARNING, "Can't set registry value for value '%s': %s", value_name, win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
+        zend_error( E_WARNING, "Can't set registry value for value '%s': %s", value_name, win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
 		RETURN_FALSE;
 	}
 	else {
@@ -318,7 +334,7 @@ PHP_FUNCTION(reg_get_value)
 	DWORD buf_len;
 	LONG rc;
 
-	char buffer[WIN32_STRERROR_BUFFER_LEN];
+    char buffer[WIN32_STRERROR_BUFFER_LEN];
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zs", &zhKey, &value_name, &value_len) == FAILURE) {
 		return;
@@ -327,6 +343,7 @@ PHP_FUNCTION(reg_get_value)
 	hKey = _registry_get_hkey(&zhKey TSRMLS_CC);
 
 	rc = RegQueryValueEx(hKey, value_name, NULL, &value_type, NULL, &buf_len);
+
 	if (rc != ERROR_SUCCESS) {
 		RETURN_FALSE;
 	}
@@ -334,7 +351,7 @@ PHP_FUNCTION(reg_get_value)
 		buf = (BYTE *)emalloc(buf_len);
 		rc = RegQueryValueEx(hKey, value_name, NULL, &value_type, buf, &buf_len);
 		if (rc != ERROR_SUCCESS) {
-			zend_error( E_WARNING, "Can't get registry value '%s': %s", value_name, win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
+            zend_error( E_WARNING, "Can't get registry value '%s': %s", value_name, win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
 			RETVAL_FALSE;
 		}
 		else {

@@ -1,5 +1,4 @@
 <?
-    // err
 	function err( $txt ) { echo "ERROR: ".$txt."\n"; exit; }
 
 
@@ -59,9 +58,8 @@
 
 
 	/* Res exemple */
-	$dll_file= 'test_resource.dll';
-	$file= realpath($dll_file);
-	if( empty($file) ) err( 'The res exemple need a dll file ! ('.$dll_file.' is missing)' );
+	$file= realpath('test_resourceDll.dll');
+	if( empty($file) ) err( 'The res exemple need a file !' );
 	res_set( $file, 'A_TYPE', 'A_RC_NAME', 'The time: '.date('d-m-Y h:i') );
 
 	echo "Res Stream read: ".file_get_contents('res://'.$file.'/A_TYPE/A_RC_NAME')."\n\n";

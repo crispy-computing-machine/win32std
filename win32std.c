@@ -25,9 +25,7 @@
 #include "php_win32std.h"
 #include "ext/standard/php_smart_string.h"
 
-#include <mmsystem.h>
-#include <commdlg.h>
-#include <ShellAPI.h>
+
 
 /* Return the Win32 error string for the last called Win32 function */
 const char * win32_strerror( char * buffer, long buffer_len)
@@ -35,7 +33,7 @@ const char * win32_strerror( char * buffer, long buffer_len)
 	if( !buffer || !buffer_len ) return NULL;
     *buffer= 0;
 
-    FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM, NULL, 
+    FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM, NULL,
 		GetLastError(), 0, buffer, buffer_len, NULL);
 
 	return buffer;
@@ -56,15 +54,12 @@ const char * win32_strerror( char * buffer, long buffer_len)
     The shell act the same way when you double click on an icon (action=NULL) or when you choose a menu item on the right click button
     This way you can also execute programs that are totaly detached from the current one (useful with DirectX games for exemple).
 */
-
-#define SHELL_EXEC_ERROR(err) case err: zend_error( E_WARNING, "Unable to execute shell [%s] on '%s' (%s)", action, file, #err ); break;
-
 PHP_FUNCTION(win_shell_execute)
 {
 	char *action= NULL, *file= NULL, *args=NULL, *dir=NULL;
 	int  action_len= 4, file_len=0, args_len=0, dir_len=0, ret;
 
-	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|sss", &file, &file_len, &action, &action_len, &args, &args_len, &dir, &dir_len ) == FAILURE ) 
+	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|sss", &file, &file_len, &action, &action_len, &args, &args_len, &dir, &dir_len ) == FAILURE )
 		RETURN_FALSE;
 
     ret= (int)ShellExecute( NULL, action, file, args, dir, SW_SHOW );
@@ -75,6 +70,7 @@ PHP_FUNCTION(win_shell_execute)
 			case 0:
 				zend_error(E_WARNING,"shell_execute failed - No more system memory");
 				break;
+#define SHELL_EXEC_ERROR(err) case err: zend_error( E_WARNING, "Unable to execute shell [%s] on '%s' (%s)", action, file, #err ); break;
 			SHELL_EXEC_ERROR(ERROR_FILE_NOT_FOUND );
 			SHELL_EXEC_ERROR(ERROR_PATH_NOT_FOUND);
 			SHELL_EXEC_ERROR(ERROR_BAD_FORMAT );
@@ -109,7 +105,7 @@ PHP_FUNCTION(win_play_wav)
 	int default_flags;
 	zend_bool loop= 0;
 
-	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|b", &file, &file_len, &loop ) == FAILURE ) 
+	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|b", &file, &file_len, &loop ) == FAILURE )
 		RETURN_FALSE;
 
 	if( !*file ) file= NULL;
@@ -121,8 +117,8 @@ PHP_FUNCTION(win_play_wav)
 	else if( loop )
 		default_flags|= SND_LOOP;
 
-	ret= PlaySound( file, NULL, default_flags | SND_FILENAME ); 
-	if( ret ) 
+	ret= PlaySound( file, NULL, default_flags | SND_FILENAME );
+	if( ret )
 		RETURN_TRUE;
 	RETURN_FALSE;
 }
@@ -130,11 +126,11 @@ PHP_FUNCTION(win_play_wav)
 
 /* {{{ proto bool win_beep(string type)
     plays the system sound used by default for pre-defined events:
-        '*': System Asterisk 
-        '!': System Exclamation 
-        'H': System Hand 
-        '?': System Question 
-        '1': System Default 
+        '*': System Asterisk
+        '!': System Exclamation
+        'H': System Hand
+        '?': System Question
+        '1': System Default
         '0': Standard beep using the computer speaker
 */
 PHP_FUNCTION(win_beep)
@@ -143,24 +139,24 @@ PHP_FUNCTION(win_beep)
 	char * str= "";
 	int str_len= 0;
 
-	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &str, &str_len ) == FAILURE ) 
+	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &str, &str_len ) == FAILURE )
 		RETURN_FALSE;
 
 	switch(*str)
 	{
-	case '*': // System Asterisk 
+	case '*': // System Asterisk
 		beep_type= MB_ICONASTERISK;
 		break;
-	case '!': // System Exclamation 
+	case '!': // System Exclamation
 		beep_type= MB_ICONEXCLAMATION;
 		break;
-	case 'H': // System Hand 
+	case 'H': // System Hand
 		beep_type= MB_ICONHAND;
 		break;
-	case '?': // System Question 
+	case '?': // System Question
 		beep_type= MB_ICONQUESTION;
 		break;
-	case '1': // System Default 
+	case '1': // System Default
 		beep_type= MB_OK;
 		break;
 	default:
@@ -177,7 +173,7 @@ PHP_FUNCTION(win_beep)
 
 
 /* {{{ proto int win_create_link( file, link_file, args, descr, workingdir )
-   Create a MS link file (.lnk) 
+   Create a MS link file (.lnk)
    Don't forget the .lnk at the end of link_file !
 */
 PHP_FUNCTION(win_create_link)
@@ -205,7 +201,7 @@ PHP_FUNCTION(win_message_box)
 {
     char *text, *caption= "PHP";
     int text_len, caption_len, type=MB_OK;
-	
+
     if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|ls", &text, &text_len, &type, &caption, &caption_len) == FAILURE ) {
 		RETURN_FALSE;
 	}
@@ -237,13 +233,13 @@ PHP_FUNCTION(win_browse_folder)
         RETURN_NULL()
     }
 
-    RETVAL_STRING( system_dir, 1 );
+    RETVAL_STRING(system_dir);
 }
 /* }}} */
 
 
 /* {{{ proto string win_browse_file( [open, path, filename, ext, filter] )
-    open or save dialog box, starting path, default filename, default extension, filter in MS format 
+    open or save dialog box, starting path, default filename, default extension, filter in M$ format
     Filter exemple: "HTML File\0*.htm;*.html\0INI file\0*.ini\0All files\0*.*\0\0"
 	or: array( "HTML File" => "*.htm;*.html", "INI File" => "*.ini", "All file" => "*.*" )
 */
@@ -257,12 +253,13 @@ PHP_FUNCTION(win_browse_file)
     BOOL res;
  	HashPosition pos;
 	smart_string smart_filter= {0};
-  
-    if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|lsssz", &open,
-        &path, &path_len, &file, &file_len, &ext, &ext_len, &zfilter) == FAILURE )
-		RETURN_NULL();
 
-    if( file ) strcpy(fileBuffer, file );
+    if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|lsssz", &open,
+        &path, &path_len, &file, &file_len, &ext, &ext_len, &zfilter) == FAILURE ){
+		RETURN_NULL();
+	}
+
+	if( file ) { strcpy(fileBuffer, file ); }
 
     memset(&ofn, 0, sizeof(OPENFILENAME));
     ofn.lStructSize= sizeof(OPENFILENAME);
@@ -283,17 +280,17 @@ PHP_FUNCTION(win_browse_file)
 	if( zfilter && Z_TYPE_P(zfilter)==IS_ARRAY ) {
 		not_string= 0;
 		zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(zfilter), &pos);
-		while (zend_hash_get_current_data_ex(Z_ARRVAL_P(zfilter), &pos) == SUCCESS) {
-			if( zend_hash_get_current_key_ex(Z_ARRVAL_P(zfilter), &key, &key_len, &key_len, &pos)!=HASH_KEY_IS_STRING ) { not_string= 1; break; }
-			if( Z_TYPE_P(entry) != IS_STRING ) { /*not_string= 1;*/ 
-				zend_error( E_WARNING, "win_browse_file: filter key '%s' must have a string value", key ); 
+		while (zend_hash_get_current_data_ex(Z_ARRVAL_P(zfilter), (void **)&entry, &pos) == SUCCESS) {
+			if( zend_hash_get_current_key_ex(Z_ARRVAL_P(zfilter), &key, &key_len, &key_len, 0, &pos)!=HASH_KEY_IS_STRING ) { not_string= 1; break; }
+			if( Z_TYPE_P(*entry)!=IS_STRING ) { /*not_string= 1;*/
+				zend_error( E_WARNING, "win_browse_file: filter key '%s' must have a string value", key );
 				zend_hash_move_forward_ex(Z_ARRVAL_P(zfilter), &pos);
-				continue; 
+				continue;
 			}
 
 			smart_string_appends( &smart_filter, key );
 			smart_string_appendc( &smart_filter, '\0' );
-			// smart_string_appends( &smart_filter, Z_STRVAL_P(entry) ); not applicable?
+			smart_string_appends( &smart_filter, Z_STRVAL_P(*entry) );
 			smart_string_appendc( &smart_filter, '\0' );
 
 			zend_hash_move_forward_ex(Z_ARRVAL_P(zfilter), &pos);
@@ -305,7 +302,7 @@ PHP_FUNCTION(win_browse_file)
 		smart_string_appendc( &smart_filter, '\0' );
 		ofn.lpstrFilter= smart_filter.c;
 		free_filter= 1;
-	} 
+	}
 	else if( zfilter && Z_TYPE_P(zfilter)==IS_STRING ) {
 		ofn.lpstrFilter= Z_STRVAL_P(zfilter);
 	}
@@ -314,17 +311,22 @@ PHP_FUNCTION(win_browse_file)
 	}
 
 
-    if( open )
+    if( open ){
         res= GetOpenFileName(&ofn);
-    else
-        res= GetSaveFileName(&ofn);
-	if( free_filter )
-		smart_string_free(&smart_filter);
-	if (!res) {
-		RETURN_NULL();
 	}
-	else {
-		RETVAL_STRING(fileBuffer);
+    else{
+        res= GetSaveFileName(&ofn);
+	}
+
+	if( free_filter ){
+		smart_string_free(&smart_filter);
+	}
+
+    if( !res ){
+        RETURN_NULL();
+	}
+    else{
+        RETVAL_STRING(fileBuffer);
 	}
 }
 /* }}} */
@@ -405,7 +407,7 @@ zend_module_entry win32std_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
 	ZEND_MINFO(win32std),
 #endif
-	PHP_WIN32STD_VERSION,
+    "0.1", /* Replace with version number for your extension */
 	STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
@@ -436,10 +438,10 @@ static void php_win32std_init_globals(zend_win32std_globals *win32std_globals)
 /* }}} */
 
 /* {{{ PHP_MINIT_FUNCTION
- */	
+ */
 ZEND_MINIT_FUNCTION(win32std)
 {
-	/* If you have INI entries, uncomment these lines 
+	/* If you have INI entries, uncomment these lines
 	ZEND_INIT_MODULE_GLOBALS(win32std, php_win32std_init_globals, NULL);
 	REGISTER_INI_ENTRIES();
 	*/
@@ -578,12 +580,11 @@ ZEND_MINFO_FUNCTION(win32std)
 {
 	php_info_print_table_start();
 	php_info_print_table_header(2, "win32std", "enabled");
-	php_info_print_table_row(2, "version", PHP_WIN32STD_VERSION);
 	php_info_print_table_row(2, "resource support", "enabled");
 	php_info_print_table_row(2, "message box support", "enabled");
 	php_info_print_table_row(2, "registry support", "enabled");
 	php_info_print_table_end();
-    
+
 	/* Remove comments if you have entries in php.ini
 	DISPLAY_INI_ENTRIES();
 	*/
@@ -609,7 +610,7 @@ PHP_FUNCTION(confirm_win32std_compiled)
 	}
 
 	len = sprintf(string, "Congratulations! You have successfully modified ext/%.78s/config.m4. Module %.78s is now compiled into PHP.", "win32std", arg);
-	RETURN_STRINGL(string, len, 1);
+	RETURN_STRINGL(string, len);
 }
 /* }}} */
 
