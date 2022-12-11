@@ -113,12 +113,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_win_browse_file, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
  /* Res functions */
-PHP_FUNCTION(res_get, arginfo_res_get);
-PHP_FUNCTION(res_list, arginfo_res_list);
-PHP_FUNCTION(res_list_type, arginfo_res_list_type);
-PHP_FUNCTION(res_open, arginfo_res_open);
-PHP_FUNCTION(res_close, arginfo_res_close);
-PHP_FUNCTION(res_set, arginfo_res_set);
+PHP_FUNCTION(res_get);
+PHP_FUNCTION(res_list);
+PHP_FUNCTION(res_list_type);
+PHP_FUNCTION(res_open);
+PHP_FUNCTION(res_close);
+PHP_FUNCTION(res_set);
 
  /* Res stream */
 php_stream *php_res_stream_open(php_stream_wrapper *wrapper, char *path, char *mode, int options, char **opened_path, php_stream_context *context STREAMS_DC);
@@ -128,12 +128,12 @@ void _php_res_destruction_handler(zend_resource *rsrc);
 
 
  /* Win32 wrapper functions   */
-PHP_FUNCTION(win_play_wav, arginfo_win_play_wav);
-PHP_FUNCTION(win_beep,arginfo_win_beep);
-PHP_FUNCTION(win_create_link,arginfo_win_create_link);
-PHP_FUNCTION(win_message_box,arginfo_win_message_box);
-PHP_FUNCTION(win_browse_folder,arginfo_win_browse_folder);
-PHP_FUNCTION(win_browse_file,arginfo_win_browse_file);
+PHP_FUNCTION(win_play_wav);
+PHP_FUNCTION(win_beep);
+PHP_FUNCTION(win_create_link);
+PHP_FUNCTION(win_message_box);
+PHP_FUNCTION(win_browse_folder);
+PHP_FUNCTION(win_browse_file);
 
  /* Win32 STD API functions that call C++ Object */
 int php_browse_for_folder( HWND wnd, const char * display, char path_buf[MAX_PATH] );
