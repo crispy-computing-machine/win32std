@@ -19,41 +19,6 @@
 
 #include "php_win32std.h"
 
-ZEND_BEGIN_ARG_INFO_EX(res_get, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_ARG_INFO(0, type)
-ZEND_ARG_INFO(0, name)
-ZEND_ARG_INFO(0, lang)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(res_list, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_ARG_INFO(0, type)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(res_list_type, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_ARG_INFO(0, as_string)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(res_open, 0, 0, 1)
-ZEND_ARG_INFO(0, module)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(res_close, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(res_set, 0, 0, 1)
-ZEND_ARG_INFO(0, module)
-ZEND_ARG_INFO(0, type)
-ZEND_ARG_INFO(0, mnameodule)
-ZEND_ARG_INFO(0, data)
-ZEND_END_ARG_INFO()
-
-
-
-
 #ifndef IS_INTRESOURCE
 #define IS_INTRESOURCE(_r) (((DWORD)(_r) >> 16) == 0)
 #endif

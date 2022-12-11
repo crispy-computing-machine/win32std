@@ -49,24 +49,7 @@ const char * win32_strerror( char * buffer, long buffer_len)
 /**************************************************************************************/
 /**************************************************************************************/
 
-// @todo
-ZEND_BEGIN_ARG_INFO_EX(win_play_wav, 0, 0, 1)
-ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(win_beep, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(win_create_link, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(win_message_box, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(win_browse_folder, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(win_browse_file, 0, 0, 1)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto: play_wav( file[, loop])
 	file may be either NULL to stop playback or a file name to start it
