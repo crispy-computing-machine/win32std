@@ -56,9 +56,9 @@ PHP_FUNCTION(res_open)
 	ZEND_PARSE_PARAMETERS_END();
 
 	// if module=="" module is the current executable
-	if( !module_len  )
+	if( !module_len  ) {
         h_module= NULL;
-    else {
+    } else {
 	    h_module= LoadLibrary(module);
 	    if( !h_module ) {
 		    zend_error(E_WARNING, "res_open '%s' failed: %s", module, win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN));
@@ -85,7 +85,7 @@ PHP_FUNCTION(res_close)
 	ZEND_PARSE_PARAMETERS_END();
 
     if((h = (HMODULE) zend_fetch_resource(Z_RES_P(res_rc), le_res_resource_name, le_res_resource)) == NULL)
-        RETURN_FALSE
+        RETURN_FALSE;
 
 
     zend_list_delete(Z_RES_VAL_P(res_rc));
@@ -111,9 +111,7 @@ PHP_FUNCTION(res_get)
     char buffer[WIN32_STRERROR_BUFFER_LEN];
     zval *res_rc;
 
-	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rss|l", &res_rc, &type, &type_len, &name, &name_len, &lang ) == FAILURE )
-		RETURN_NULL();
-
+	//if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rss|l", &res_rc, &type, &type_len, &name, &name_len, &lang ) == FAILURE )
 	ZEND_PARSE_PARAMETERS_START(3, 4)
 		Z_PARAM_RESOURCE(res_rc)
 		Z_PARAM_STRING(type, type_len)
