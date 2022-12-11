@@ -6,7 +6,7 @@ Summary
 	- RES (access to resource of .exe/.dll files on Win32)
 	- RES stream wrapper for reading. Compatible with the res protocol defined by MS
 	- Common Win32 dialogs (open/save file, open dir, message boxes)
-	- Wrapper for some standard function (win_shell_execute, win_play_wav, win_beep, win_create_link)
+	- Wrapper for some standard function (win_play_wav, win_beep, win_create_link)
 
 
 Reference
@@ -39,14 +39,6 @@ array res_list( resource module, string type )
 array res_list_type( resource module [, bool as_string=true] )
 	return the resource type list for a given module
 	as_string specify if known type should be translated to string (but such string can't be used in res_get)
-
-
-bool win_shell_execute(string absolute_path[, string action, string args, string dir])
-    Execute a shell action on a file or directory
-    Common actions: open, edit, explore, find, print, properties
-    The shell act the same way when you double click on an icon (action=NULL) or when you choose a menu item on the right click button
-    This way you can also execute programs that are totaly detached from the current one (useful with DirectX games for exemple).
-
 
 win_play_wav( file[, loop])
 	file may be either NULL to stop playback or a file name to start it

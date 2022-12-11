@@ -14,11 +14,6 @@
 	echo win_browse_file( 1, NULL, 'a_file', 'ext', $filter )."\n";
 	echo win_browse_folder(NULL, "Choose a dir")."\n";
 
-
-	/* Shell execute exemple */
-	win_shell_execute( 'c:\\', "find" );
-
-
 	/* beep exemple */
 	if( !win_beep('*') )
 		echo "Unable to beep !\n";

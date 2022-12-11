@@ -10,7 +10,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 - RES (access to resource of .exe/.dll files on Win32)
 - RES stream wrapper for reading. Compatible with the res protocol defined by MS
 - Common Win32 dialogs (open/save file, open dir, message boxes)
-- Wrapper for some standard function (win_shell_execute, win_play_wav, win_beep, win_create_link)
+- Wrapper for some standard function (win_play_wav, win_beep, win_create_link)
  </description>
  <lead>
   <name>Eric Colinet</name>

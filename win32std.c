@@ -23,6 +23,7 @@
 #endif
 
 #include "php_win32std.h"
+#include "ext/standard/info.h"
 #include "ext/standard/php_smart_string.h"
 
 
@@ -47,56 +48,6 @@ const char * win32_strerror( char * buffer, long buffer_len)
 /****************************** Win32 Functions ***************************************/
 /**************************************************************************************/
 /**************************************************************************************/
-
-/* {{{ proto bool win_shell_execute(string absolute_path[, string action, string args, string dir])
-    Execute a shell action on a file or directory
-    Common actions: open, edit, explore, find, print, properties
-    The shell act the same way when you double click on an icon (action=NULL) or when you choose a menu item on the right click button
-    This way you can also execute programs that are totaly detached from the current one (useful with DirectX games for exemple).
-*/
-PHP_FUNCTION(win_shell_execute)
-{
-	char *action= NULL, *file= NULL, *args=NULL, *dir=NULL;
-	int  action_len= 4, file_len=0, args_len=0, dir_len=0, ret;
-
-	//if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|sss", &file, &file_len, &action, &action_len, &args, &args_len, &dir, &dir_len ) == FAILURE )
-	ZEND_PARSE_PARAMETERS_START(1, 4)
-		Z_PARAM_STRING(file, file_len)
-		Z_PARAM_OPTIONAL
-		Z_PARAM_STRING(action, action_len)
-		Z_PARAM_STRING(args, args_len)
-		Z_PARAM_STRING(dir, dir_len)
-	ZEND_PARSE_PARAMETERS_END();
-
-    ret= (int)ShellExecute( NULL, action, file, args, dir, SW_SHOW );
-	if( ret<=32 )
-	{
-		switch( ret )
-		{
-			case 0:
-				zend_error(E_WARNING,"shell_execute failed - No more system memory");
-				break;
-#define SHELL_EXEC_ERROR(err) case err: zend_error( E_WARNING, "Unable to execute shell [%s] on '%s' (%s)", action, file, #err ); break;
-			SHELL_EXEC_ERROR(ERROR_FILE_NOT_FOUND );
-			SHELL_EXEC_ERROR(ERROR_PATH_NOT_FOUND);
-			SHELL_EXEC_ERROR(ERROR_BAD_FORMAT );
-			SHELL_EXEC_ERROR(SE_ERR_ACCESSDENIED );
-			SHELL_EXEC_ERROR(SE_ERR_ASSOCINCOMPLETE);
-			SHELL_EXEC_ERROR(SE_ERR_DDEBUSY);
-			SHELL_EXEC_ERROR(SE_ERR_DDEFAIL );
-			SHELL_EXEC_ERROR(SE_ERR_DDETIMEOUT );
-			SHELL_EXEC_ERROR(SE_ERR_DLLNOTFOUND );
-			SHELL_EXEC_ERROR(SE_ERR_NOASSOC );
-			SHELL_EXEC_ERROR(SE_ERR_OOM );
-			SHELL_EXEC_ERROR(SE_ERR_SHARE);
-#undef SHELL_EXEC_ERROR
-		}
-		RETURN_FALSE;
-	}
-    RETURN_TRUE;
-}
-/* }}} */
-
 
 /* {{{ proto: play_wav( file[, loop])
 	file may be either NULL to stop playback or a file name to start it
@@ -400,7 +351,6 @@ zend_function_entry win32std_functions[] = {
 	PHP_FE(res_set,			NULL)
 
 	/* Win32 */
-	PHP_FE(win_shell_execute,	NULL)
 	PHP_FE(win_play_wav,		NULL)
 	PHP_FE(win_beep,			    NULL)
 	PHP_FE(win_message_box,	NULL)
