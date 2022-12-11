@@ -9,7 +9,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <description>Contains:
 - RES (access to resource of .exe/.dll files on Win32)
 - RES stream wrapper for reading. Compatible with the res protocol defined by MS
-- REGISTRY access 
 - Common Win32 dialogs (open/save file, open dir, message boxes)
 - Wrapper for some standard function (win_shell_execute, win_play_wav, win_beep, win_create_link)
  </description>
@@ -48,7 +47,6 @@ First release
    <file name="CREDITS" role="doc" />
    <file name="php_win32std.h" role="src" />
    <file name="README" role="doc" />
-   <file name="registry.c" role="src" />
    <file name="res.c" role="src" />
    <file name="res_stream.c" role="src" />
    <file name="win32std.c" role="src" />

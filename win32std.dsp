@@ -96,10 +96,6 @@ SOURCE=.\cpp_functions.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\registry.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\res.c
 # End Source File
 # Begin Source File

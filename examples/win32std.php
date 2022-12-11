@@ -40,24 +40,6 @@
 			echo "Play stopped !\n";
 	} 
 
-
-	/* Reg exemple */
-	$strMainKey= 'Control Panel';
-	$mainKey= reg_open_key( HKEY_CURRENT_USER, $strMainKey );
-	if( !$mainKey ) err( "Can't open '$strMainKey' !" );
-	echo "'$strMainKey' Key opened\n\nKeys:\n";
-	print_r( reg_enum_key($mainKey) );
-	for( $i= 0; $key= reg_enum_key($mainKey, $i); $i++ ) {
-		echo "\t$key\n";
-	}
-	echo "\nValues:\n";
-	print_r( reg_enum_value($mainKey) );
-	for( $i= 0; $value= reg_enum_value($mainKey, $i); $i++ ) {
-		echo "\t$value=".reg_get_value($mainKey, $value)."\n";
-	}
-	reg_close_key($mainKey);
-
-
 	/* Res exemple */
 	$dll_file= 'test_resource.dll';
 	$file= realpath($dll_file);

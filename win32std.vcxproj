@@ -252,7 +252,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cpp_functions.cpp" />
-    <ClCompile Include="registry.c" />
     <ClCompile Include="res.c" />
     <ClCompile Include="res_stream.c" />
     <ClCompile Include="win32std.c" />

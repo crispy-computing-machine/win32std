@@ -5,7 +5,6 @@ Summary
 ----------
 	- RES (access to resource of .exe/.dll files on Win32)
 	- RES stream wrapper for reading. Compatible with the res protocol defined by MS
-	- REGISTRY access 
 	- Common Win32 dialogs (open/save file, open dir, message boxes)
 	- Wrapper for some standard function (win_shell_execute, win_play_wav, win_beep, win_create_link)
 
@@ -83,37 +82,6 @@ string win_browse_file( [open, path, filename, ext, filter] )
     open or save dialog box, starting path, default filename, default extension, filter in MS format 
     Filter exemple: "HTML File\0*.htm;*.html\0INI file\0*.ini\0All files\0*.*\0\0"
 
-
-resource reg_open_key(mixed hKey, string subkey [, int samDesired = KEY_ALL_ACCESS])
-	Open a registry key
-
-
-resource reg_create_key(mixed hKey, string subkey [, int samDesired = KEY_ALL_ACCESS])
-	Create a sub key
-
-
-void reg_close_key(resource hKey)
-	Close a registry key
-
-
-mixed reg_enum_key(mixed hKey[, int index=1])
-	Return the 'index' based sub key.
-	Return false when done.
-
-
-mixed reg_enum_value(mixed hKey[, int index=-1])
-	Return the 'index' based value.
-	Return false when done.
-
-
-bool reg_set_value(mixed hKey, string value_name, int type, mixed value)
-	Set a value.
-
-
-mixed reg_get_value(mixed hKey, string value_name)
-	Get a value.
-
-
 Constants for resource types
 	RT_CURSOR="#1"
 	RT_BITMAP="#2"
@@ -172,25 +140,3 @@ Message box return constants
 	MB_IDIGNORE
 	MB_IDRETRY
 
-
-Registry main key constants
-	HKEY_CLASSES_ROOT
-	HKEY_CURRENT_CONFIG
-	HKEY_CURRENT_USER
-	HKEY_LOCAL_MACHINE
-	HKEY_USERS
-
-
-Registry access type
-	KEY_ALL_ACCESS
-	KEY_WRITE
-	KEY_READ
-
-
-Registry value type
-	REG_BINARY
-	REG_DWORD
-	REG_EXPAND_SZ
-	REG_MULTI_SZ
-	REG_NONE
-	REG_SZ

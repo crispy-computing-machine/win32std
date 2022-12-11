@@ -375,15 +375,6 @@ zend_function_entry win32std_functions[] = {
 	PHP_FE(win_browse_folder,	NULL)
 	PHP_FE(win_browse_file,		NULL)
 
-	/* Registry */
-	PHP_FE(reg_close_key,		NULL)
-	PHP_FE(reg_create_key,		NULL)
-	PHP_FE(reg_enum_key,	    NULL)
-	PHP_FE(reg_enum_value,	    NULL)
-	PHP_FE(reg_open_key,		NULL)
-	PHP_FE(reg_set_value,		NULL)
-	PHP_FE(reg_get_value,	NULL)
-
     {NULL, NULL, NULL}	/* Must be the last line in win32std_functions[] */
 };
 /* }}} */
@@ -512,35 +503,6 @@ ZEND_MINIT_FUNCTION(win32std)
 	REGISTER_LONG_CONSTANT("MB_IDRETRY", IDRETRY, CONST_CS|CONST_PERSISTENT);
 //	REGISTER_LONG_CONSTANT("MB_IDTRYAGAIN", IDTRYAGAIN, CONST_CS|CONST_PERSISTENT);
 
-    /**
-    * Registry
-    **/
-	le_key = zend_register_list_destructors_ex(php_hkey_close, NULL, le_key_resource_name, module_number);
-
-    /* Registry main key constants */
-	REGISTER_LONG_CONSTANT("HKEY_CLASSES_ROOT", 0, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("HKEY_CURRENT_CONFIG", 1, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("HKEY_CURRENT_USER", 2, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("HKEY_LOCAL_MACHINE", 3, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("HKEY_USERS", 4, CONST_CS | CONST_PERSISTENT);
-
-    /* Registry access type */
-	REGISTER_LONG_CONSTANT("KEY_ALL_ACCESS", KEY_ALL_ACCESS, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("KEY_WRITE",  KEY_WRITE, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("KEY_READ", KEY_READ, CONST_CS | CONST_PERSISTENT);
-
-    /* Registry value type */
-	REGISTER_LONG_CONSTANT("REG_BINARY", REG_BINARY, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("REG_DWORD", REG_DWORD, CONST_CS | CONST_PERSISTENT);
-//	REGISTER_LONG_CONSTANT("REG_DWORD_LITTLE_ENDIAN", REG_DWORD_LITTLE_ENDIAN, CONST_CS | CONST_PERSISTENT);
-//	REGISTER_LONG_CONSTANT("REG_DWORD_BIG_ENDIAN", REG_DWORD_BIG_ENDIAN, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("REG_EXPAND_SZ", REG_EXPAND_SZ, CONST_CS | CONST_PERSISTENT);
-//	REGISTER_LONG_CONSTANT("REG_LINK", REG_LINK, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("REG_MULTI_SZ", REG_MULTI_SZ, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("REG_NONE", REG_NONE, CONST_CS | CONST_PERSISTENT);
-//	REGISTER_LONG_CONSTANT("REG_RESOURCE_LIST", REG_RESOURCE_LIST, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("REG_SZ", REG_SZ, CONST_CS | CONST_PERSISTENT);
-
 	return SUCCESS;
 }
 /* }}} */
@@ -582,7 +544,6 @@ ZEND_MINFO_FUNCTION(win32std)
 	php_info_print_table_header(2, "win32std", "enabled");
 	php_info_print_table_row(2, "resource support", "enabled");
 	php_info_print_table_row(2, "message box support", "enabled");
-	php_info_print_table_row(2, "registry support", "enabled");
 	php_info_print_table_end();
 
 	/* Remove comments if you have entries in php.ini

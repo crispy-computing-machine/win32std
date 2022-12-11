@@ -48,15 +48,6 @@ extern zend_module_entry win32std_module_entry;
 extern int le_res_resource;
 #define le_res_resource_name  "RES resource"
 
-extern int le_key;
-#define le_key_resource_name  "Registry hKey"
-
-
-typedef struct _registry_hkey {
-	HKEY hKey;
-} registry_hkey;
-
-void php_hkey_close(zend_resource *rsrc);
 
 #define WIN32_STRERROR_BUFFER_LEN 256
 const char * win32_strerror( char * buffer, long buffer_len);
@@ -95,15 +86,6 @@ PHP_FUNCTION(win_message_box);
 PHP_FUNCTION(win_browse_folder);
 PHP_FUNCTION(win_browse_file);
 
-
- /* Registry functions */
-PHP_FUNCTION(reg_create_key);
-PHP_FUNCTION(reg_open_key);
-PHP_FUNCTION(reg_close_key);
-PHP_FUNCTION(reg_enum_key);
-PHP_FUNCTION(reg_enum_value);
-PHP_FUNCTION(reg_get_value);
-PHP_FUNCTION(reg_set_value);
 
 
  /* Win32 STD API functions that call C++ Object */

@@ -6,6 +6,6 @@ ARG_WITH("win32std", "Access to Win32 API's", "no");
 if (PHP_WIN32STD == "yes") {
 	CHECK_LIB("winmm.lib", "win32std");
 	CHECK_LIB("comdlg32.lib", "win32std");
-	EXTENSION("win32std", "win32std.c registry.c res.c res_stream.c cpp_wrappers.cpp");
+	EXTENSION("win32std", "win32std.c res.c res_stream.c cpp_wrappers.cpp");
 	AC_DEFINE('HAVE_WIN32STD', 1, 'Have Win32 API support', false);
 }
