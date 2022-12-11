@@ -91,9 +91,9 @@ PHP_FUNCTION(win_shell_execute)
 			SHELL_EXEC_ERROR(SE_ERR_SHARE);
 #undef SHELL_EXEC_ERROR
 		}
-		RETURN_FALSE
+		RETURN_FALSE;
 	}
-    RETURN_TRUE
+    RETURN_TRUE;
 }
 /* }}} */
 
@@ -258,7 +258,7 @@ PHP_FUNCTION(win_browse_folder)
 	}
 
     if( !php_browse_for_folder(NULL, caption, system_dir) ) {
-        RETURN_NULL()
+        RETURN_NULL();
     }
 
     RETVAL_STRING(system_dir);

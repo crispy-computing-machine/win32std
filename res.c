@@ -62,7 +62,7 @@ PHP_FUNCTION(res_open)
 	    h_module= LoadLibrary(module);
 	    if( !h_module ) {
 		    zend_error(E_WARNING, "res_open '%s' failed: %s", module, win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN));
-		    RETURN_FALSE
+		    RETURN_FALSE;
 	    }
     }
 
@@ -126,7 +126,7 @@ PHP_FUNCTION(res_get)
     }
 
 	if((h_module = (HMODULE)zend_fetch_resource(Z_RES_P(res_rc), le_res_resource_name, le_res_resource)) == NULL)
-		RETURN_FALSE
+		RETURN_FALSE;
 
 
     // Convert name and type to uppercase since lowercase don't work
@@ -282,7 +282,7 @@ PHP_FUNCTION(res_list)
 	ZEND_PARSE_PARAMETERS_END();
 
 	if(( h_module = (HMODULE)zend_fetch_resource(Z_RES_P(res_rc), le_res_resource_name, le_res_resource)) == NULL)
-		RETURN_FALSE
+		RETURN_FALSE;
 
 	if( !type || !type[0] ) RETURN_FALSE;
 	if( *type=='#' )
@@ -405,7 +405,7 @@ PHP_FUNCTION(res_list_type)
 	ZEND_PARSE_PARAMETERS_END();
 
     if((h_module = (HMODULE) zend_fetch_resource(Z_RES_P(res_rc), le_res_resource_name, le_res_resource)) == NULL){
-    	RETURN_FALSE
+    	RETURN_FALSE;
     }
 
 	array_init( return_value );
