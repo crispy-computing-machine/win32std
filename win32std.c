@@ -59,8 +59,14 @@ PHP_FUNCTION(win_shell_execute)
 	char *action= NULL, *file= NULL, *args=NULL, *dir=NULL;
 	int  action_len= 4, file_len=0, args_len=0, dir_len=0, ret;
 
-	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|sss", &file, &file_len, &action, &action_len, &args, &args_len, &dir, &dir_len ) == FAILURE )
-		RETURN_FALSE;
+	//if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|sss", &file, &file_len, &action, &action_len, &args, &args_len, &dir, &dir_len ) == FAILURE )
+	ZEND_PARSE_PARAMETERS_START(1, 4)
+		Z_PARAM_STRING(file, file_len)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STRING(action, action_len)
+		Z_PARAM_STRING(args, args_len)
+		Z_PARAM_STRING(dir, dir_len)
+	ZEND_PARSE_PARAMETERS_END();
 
     ret= (int)ShellExecute( NULL, action, file, args, dir, SW_SHOW );
 	if( ret<=32 )
@@ -105,8 +111,12 @@ PHP_FUNCTION(win_play_wav)
 	int default_flags;
 	zend_bool loop= 0;
 
-	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|b", &file, &file_len, &loop ) == FAILURE )
-		RETURN_FALSE;
+	//if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|b", &file, &file_len, &loop ) == FAILURE )
+	ZEND_PARSE_PARAMETERS_START(1, 2)
+		Z_PARAM_STRING(file, file_len)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_BOOL(loop)
+	ZEND_PARSE_PARAMETERS_END();
 
 	if( !*file ) file= NULL;
 
@@ -139,8 +149,11 @@ PHP_FUNCTION(win_beep)
 	char * str= "";
 	int str_len= 0;
 
-	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &str, &str_len ) == FAILURE )
-		RETURN_FALSE;
+	//if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &str, &str_len ) == FAILURE )
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STRING(str, str_len)
+	ZEND_PARSE_PARAMETERS_END();
 
 	switch(*str)
 	{
@@ -162,11 +175,12 @@ PHP_FUNCTION(win_beep)
 	default:
 	case '0': // Standard beep using the computer speaker
 		beep_type= 0xFFFFFFFF;
-		zend_printf("Default\n");
+		// zend_printf("Default\n");
 		break;
 	}
 	if( !MessageBeep( beep_type ) )
 		RETURN_FALSE;
+
 	RETURN_TRUE;
 }
 /* }}} */
@@ -181,9 +195,16 @@ PHP_FUNCTION(win_create_link)
     char *file, *link, *args=NULL, *descr=NULL, *workingdir=NULL;
     int file_len, link_len, args_len, descr_len, workingdir_len;
 
-    if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss|sss", &file, &file_len, &link, &link_len, &args, &args_len, &descr, &descr_len, &workingdir, &workingdir_len) == FAILURE ) {
-		return;
-	}
+    //if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss|sss", &file, &file_len, &link, &link_len, &args, &args_len, &descr, &descr_len, &workingdir, &workingdir_len) == FAILURE )
+	ZEND_PARSE_PARAMETERS_START(2, 5)
+		Z_PARAM_STRING(file, file_len)
+		Z_PARAM_STRING(link, link_len)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STRING(args, args_len)
+		Z_PARAM_STRING(descr, descr_len)
+		Z_PARAM_STRING(workingdir, workingdir_len)
+	ZEND_PARSE_PARAMETERS_END();
+
     if( !php_create_link(file, link, args, descr, workingdir) ) {
         RETURN_FALSE;
     }
@@ -202,9 +223,13 @@ PHP_FUNCTION(win_message_box)
     char *text, *caption= "PHP";
     int text_len, caption_len, type=MB_OK;
 
-    if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|ls", &text, &text_len, &type, &caption, &caption_len) == FAILURE ) {
-		RETURN_FALSE;
-	}
+    //if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|ls", &text, &text_len, &type, &caption, &caption_len) == FAILURE )
+	ZEND_PARSE_PARAMETERS_START(1, 3)
+		Z_PARAM_STRING(text, text_len)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG(type)
+		Z_PARAM_STRING(caption, caption_len)
+	ZEND_PARSE_PARAMETERS_END();
 
     RETURN_LONG(MessageBox(NULL, text, caption, type|MB_TASKMODAL));
 }
@@ -220,9 +245,12 @@ PHP_FUNCTION(win_browse_folder)
     char *dir=NULL, *caption=NULL, system_dir[MAX_PATH+1]= "";
     int dir_len, caption_len;
 
-    if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|ss", &dir, &dir_len, &caption, &caption_len) == FAILURE ) {
-		return;
-	}
+    //if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|ss", &dir, &dir_len, &caption, &caption_len) == FAILURE )
+	ZEND_PARSE_PARAMETERS_START(0, 2)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STRING(dir, dir_len)
+		Z_PARAM_STRING(caption, caption_len)
+	ZEND_PARSE_PARAMETERS_END();
 
 	if( dir ) {
 		strncpy( system_dir, dir, MAX_PATH );
@@ -254,10 +282,15 @@ PHP_FUNCTION(win_browse_file)
  	HashPosition pos;
 	smart_string smart_filter= {0};
 
-    if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|lsssz", &open,
-        &path, &path_len, &file, &file_len, &ext, &ext_len, &zfilter) == FAILURE ){
-		RETURN_NULL();
-	}
+    //if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|lsssz", &open, &path, &path_len, &file, &file_len, &ext, &ext_len, &zfilter) == FAILURE )
+	ZEND_PARSE_PARAMETERS_START(0, 5)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG(open)
+		Z_PARAM_STRING(path, path_len)
+		Z_PARAM_STRING(file, file_len)
+		Z_PARAM_STRING(ext, ext_len)
+		Z_PARAM_ZVAL(zfilter)
+	ZEND_PARSE_PARAMETERS_END();
 
 	if( file ) { strcpy(fileBuffer, file ); }
 
@@ -441,7 +474,7 @@ ZEND_MINIT_FUNCTION(win32std)
     * Resources
     **/
 	le_res_resource = zend_register_list_destructors_ex(_php_res_destruction_handler, NULL, le_res_resource_name, module_number);
-	php_register_url_stream_wrapper("res", &php_res_stream_wrapper TSRMLS_CC);
+	php_register_url_stream_wrapper("res", &php_res_stream_wrapper);
 
     /* Resource type constants */
 	REGISTER_STRING_CONSTANT("RT_CURSOR", ("#1"), CONST_CS|CONST_PERSISTENT);
@@ -566,9 +599,10 @@ PHP_FUNCTION(confirm_win32std_compiled)
 	int arg_len, len;
 	char string[256];
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &arg, &arg_len) == FAILURE) {
-		return;
-	}
+	//if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &arg, &arg_len) == FAILURE)
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STRING(arg, arg_len)
+	ZEND_PARSE_PARAMETERS_END();
 
 	len = sprintf(string, "Congratulations! You have successfully modified ext/%.78s/config.m4. Module %.78s is now compiled into PHP.", "win32std", arg);
 	RETURN_STRINGL(string, len);

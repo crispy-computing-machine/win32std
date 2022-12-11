@@ -86,7 +86,60 @@ PHP_FUNCTION(win_message_box);
 PHP_FUNCTION(win_browse_folder);
 PHP_FUNCTION(win_browse_file);
 
+/* PHP 8 Args*/
+ZEND_BEGIN_ARG_INFO_EX(res_get, 0, 0, 1)
+ZEND_ARG_INFO(0, res_rc)
+ZEND_ARG_INFO(0, type)
+ZEND_ARG_INFO(0, name)
+ZEND_ARG_INFO(0, lang)
+ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(res_list, 0, 0, 1)
+ZEND_ARG_INFO(0, res_rc)
+ZEND_ARG_INFO(0, type)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(res_list_type, 0, 0, 1)
+ZEND_ARG_INFO(0, res_rc)
+ZEND_ARG_INFO(0, as_string)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(res_open, 0, 0, 1)
+ZEND_ARG_INFO(0, module)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(res_close, 0, 0, 1)
+ZEND_ARG_INFO(0, res_rc)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(res_set, 0, 0, 1)
+ZEND_ARG_INFO(0, module)
+ZEND_ARG_INFO(0, type)
+ZEND_ARG_INFO(0, mnameodule)
+ZEND_ARG_INFO(0, data)
+ZEND_END_ARG_INFO()
+
+// @todo
+ZEND_BEGIN_ARG_INFO_EX(win_shell_exec, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(win_play_wav, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(win_beep, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(win_create_link, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(win_message_box, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(win_browse_folder, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(win_browse_file, 0, 0, 1)
+ZEND_END_ARG_INFO()
 
  /* Win32 STD API functions that call C++ Object */
 int php_browse_for_folder( HWND wnd, const char * display, char path_buf[MAX_PATH] );
