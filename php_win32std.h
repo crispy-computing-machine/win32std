@@ -60,58 +60,6 @@ ZEND_RINIT_FUNCTION(win32std);
 ZEND_RSHUTDOWN_FUNCTION(win32std);
 ZEND_MINFO_FUNCTION(win32std);
 
-// php 8 arginfo
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_get, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_ARG_INFO(0, type)
-ZEND_ARG_INFO(0, name)
-ZEND_ARG_INFO(0, lang)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_list, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_ARG_INFO(0, type)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_list_type, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_ARG_INFO(0, as_string)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_open, 0, 0, 1)
-ZEND_ARG_INFO(0, module)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_close, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_set, 0, 0, 1)
-ZEND_ARG_INFO(0, module)
-ZEND_ARG_INFO(0, type)
-ZEND_ARG_INFO(0, mnameodule)
-ZEND_ARG_INFO(0, data)
-ZEND_END_ARG_INFO()
-
-// @todo php 8 arginfo
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_play_wav, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_beep, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_create_link, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_message_box, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_browse_folder, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_browse_file, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
  /* Res functions */
 PHP_FUNCTION(res_get);
 PHP_FUNCTION(res_list);

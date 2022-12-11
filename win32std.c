@@ -337,6 +337,58 @@ ZEND_DECLARE_MODULE_GLOBALS(win32std)
 //static int le_win32std;
 
 
+// php 8 arginfo
+ZEND_BEGIN_ARG_INFO_EX(arginfo_res_get, 0, 0, 1)
+ZEND_ARG_INFO(0, res_rc)
+ZEND_ARG_INFO(0, type)
+ZEND_ARG_INFO(0, name)
+ZEND_ARG_INFO(0, lang)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_res_list, 0, 0, 1)
+ZEND_ARG_INFO(0, res_rc)
+ZEND_ARG_INFO(0, type)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_res_list_type, 0, 0, 1)
+ZEND_ARG_INFO(0, res_rc)
+ZEND_ARG_INFO(0, as_string)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_res_open, 0, 0, 1)
+ZEND_ARG_INFO(0, module)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_res_close, 0, 0, 1)
+ZEND_ARG_INFO(0, res_rc)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_res_set, 0, 0, 1)
+ZEND_ARG_INFO(0, module)
+ZEND_ARG_INFO(0, type)
+ZEND_ARG_INFO(0, mnameodule)
+ZEND_ARG_INFO(0, data)
+ZEND_END_ARG_INFO()
+
+// @todo php 8 arginfo
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_play_wav, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_beep, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_create_link, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_message_box, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_browse_folder, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_browse_file, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
 
 /* {{{ win32std_functions[]
  *
@@ -345,20 +397,20 @@ ZEND_DECLARE_MODULE_GLOBALS(win32std)
 zend_function_entry win32std_functions[] = {
 
 	/* Res */
-	PHP_FE(res_get,			NULL)
-	PHP_FE(res_list,		    NULL)
-	PHP_FE(res_list_type,	NULL)
-	PHP_FE(res_open,		NULL)
-	PHP_FE(res_close,		NULL)
-	PHP_FE(res_set,			NULL)
+	PHP_FE(res_get,			arginfo_res_get)
+	PHP_FE(res_list,		    arginfo_res_list)
+	PHP_FE(res_list_type,	arginfo_res_list_type)
+	PHP_FE(res_open,		arginfo_res_open)
+	PHP_FE(res_close,		arginfo_res_close)
+	PHP_FE(res_set,			arginfo_res_set)
 
 	/* Win32 */
-	PHP_FE(win_play_wav,		NULL)
-	PHP_FE(win_beep,			    NULL)
-	PHP_FE(win_message_box,	NULL)
-	PHP_FE(win_create_link,		NULL)
-	PHP_FE(win_browse_folder,	NULL)
-	PHP_FE(win_browse_file,		NULL)
+	PHP_FE(win_play_wav,		arginfo_win_play_wav)
+	PHP_FE(win_beep,			    arginfo_win_beep)
+	PHP_FE(win_message_box,	arginfo_win_create_link)
+	PHP_FE(win_create_link,		arginfo_win_message_box)
+	PHP_FE(win_browse_folder,	arginfo_win_browse_folder)
+	PHP_FE(win_browse_file,		arginfo_win_browse_file)
 
     {NULL, NULL, NULL}	/* Must be the last line in win32std_functions[] */
 };
