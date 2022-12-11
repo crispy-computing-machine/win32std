@@ -29,7 +29,7 @@ typedef struct _res_stream_data{
 
 
 
-static size_t php_res_read(php_stream *stream, char *buf, size_t count TSRMLS_DC)
+static size_t php_res_read(php_stream *stream, char *buf, size_t count)
 {
 	res_stream_data *self = (res_stream_data *)stream->abstract;
     int read;
@@ -44,7 +44,7 @@ static size_t php_res_read(php_stream *stream, char *buf, size_t count TSRMLS_DC
 	return read;
 }
 
-static int php_res_seek(php_stream *stream, off_t offset, int whence, off_t *newoffs TSRMLS_DC)
+static int php_res_seek(php_stream *stream, off_t offset, int whence, off_t *newoffs)
 {
 	res_stream_data *self = (res_stream_data *)stream->abstract;
     
@@ -72,7 +72,7 @@ static int php_res_seek(php_stream *stream, off_t offset, int whence, off_t *new
     return 0;
 }
 
-static int php_res_close(php_stream *stream, int close_handle TSRMLS_DC)
+static int php_res_close(php_stream *stream, int close_handle)
 {
 	res_stream_data *self = (res_stream_data *)stream->abstract;
     if( self->module ) FreeLibrary(self->module);
@@ -93,7 +93,7 @@ php_stream_ops php_res_stream_ops = {
 
 
 php_stream *php_res_stream_open(php_stream_wrapper *wrapper, char *path, char *mode,
-		int options, char **opened_path, php_stream_context *context STREAMS_DC TSRMLS_DC);
+		int options, char **opened_path, php_stream_context *context STREAMS_DC);
 
 /* Wrapper operation entry */
 static php_stream_wrapper_ops php_res_wrapper_ops = {
@@ -123,7 +123,7 @@ php_stream_wrapper php_res_stream_wrapper =	{
 */
 
 php_stream *php_res_stream_open(php_stream_wrapper *wrapper, char *path, char *mode,
-		int options, char **opened_path, php_stream_context *context STREAMS_DC TSRMLS_DC)
+		int options, char **opened_path, php_stream_context *context STREAMS_DC)
 {
 	res_stream_data *self;
 	php_stream *stream = NULL;

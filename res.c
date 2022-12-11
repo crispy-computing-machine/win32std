@@ -33,7 +33,7 @@ TODO:
 /* static */ int le_res_resource;
 
 
-void _php_res_destruction_handler(zend_resource *rsrc TSRMLS_DC) {
+void _php_res_destruction_handler(zend_resource *rsrc) {
     HMODULE module = (HMODULE) rsrc->ptr;
     if( module )
 		FreeLibrary(module);

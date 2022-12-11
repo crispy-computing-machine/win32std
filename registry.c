@@ -32,7 +32,7 @@
 /*static*/ int le_key;
 
 
-void php_hkey_close(zend_resource *rsrc TSRMLS_DC)
+void php_hkey_close(zend_resource *rsrc)
 {
 	registry_hkey *hKey = (registry_hkey *)rsrc->ptr;
 
@@ -40,7 +40,7 @@ void php_hkey_close(zend_resource *rsrc TSRMLS_DC)
 	efree(hKey);
 }
 
-static HKEY _registry_get_hkey(zval **zhKey TSRMLS_DC) {
+static HKEY _registry_get_hkey(zval **zhKey) {
 	HKEY hKey;
 
 	switch (Z_TYPE_P(*zhKey)) {
