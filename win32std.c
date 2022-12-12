@@ -232,6 +232,7 @@ PHP_FUNCTION(win_browse_file)
     char fileBuffer[MAX_PATH]= "";
     OPENFILENAME ofn;
     BOOL res;
+	HashTable *target_hash;
  	HashPosition pos;
 	smart_string smart_filter= {0};
 
@@ -261,16 +262,25 @@ PHP_FUNCTION(win_browse_file)
     ofn.Flags= OFN_CREATEPROMPT|OFN_NOCHANGEDIR|OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST|OFN_HIDEREADONLY;
     //OFN_FILEMUSTEXIST
 
+	php_printf("win_browse_file: file filter hashtable=%p\n", Z_ARRVAL_P(zv_ptr));
+
 	/* Filter */
 	free_filter= 0;
 	if( zfilter && Z_TYPE_P(zfilter)==IS_ARRAY ) {
+
+		target_hash = HASH_OF(zarray);
 		not_string= 0;
-		zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(zfilter), &pos);
-		while (zend_hash_get_current_data_ex(Z_ARRVAL_P(zfilter), (void **)&entry, &pos) == SUCCESS) {
-			if( zend_hash_get_current_key_ex(Z_ARRVAL_P(zfilter), &key, &key_len, &key_len, 0, &pos)!=HASH_KEY_IS_STRING ) { not_string= 1; break; }
+		zend_hash_internal_pointer_reset_ex(target_hash, &pos);
+		while (zend_hash_get_current_data_ex(target_hash, (void**)&entry, &pos) == SUCCESS) {
+			
+			if( zend_hash_get_current_key_ex(target_hash, &key, &key_len, &key_len, 0, &pos)!=HASH_KEY_IS_STRING ) { 
+				not_string= 1; break; 
+			
+			}
+
 			if( Z_TYPE_P(*entry)!=IS_STRING ) { /*not_string= 1;*/
 				zend_error( E_WARNING, "win_browse_file: filter key '%s' must have a string value", key );
-				zend_hash_move_forward_ex(Z_ARRVAL_P(zfilter), &pos);
+				zend_hash_move_forward_ex(target_hash, &pos);
 				continue;
 			}
 
@@ -279,7 +289,7 @@ PHP_FUNCTION(win_browse_file)
 			smart_string_appends( &smart_filter, Z_STRVAL_P(*entry) );
 			smart_string_appendc( &smart_filter, '\0' );
 
-			zend_hash_move_forward_ex(Z_ARRVAL_P(zfilter), &pos);
+			zend_hash_move_forward_ex(target_hash, &pos);
 		}
 		if(not_string ) {
 			zend_error( E_WARNING, "win_browse_file: filter must be an associative array" );
