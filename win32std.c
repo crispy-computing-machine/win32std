@@ -268,7 +268,7 @@ PHP_FUNCTION(win_browse_file)
 	free_filter= 0;
 	if( zfilter && Z_TYPE_P(zfilter)==IS_ARRAY ) {
 
-		target_hash = HASH_OF(zarray);
+		target_hash = HASH_OF(zfilter);
 		not_string= 0;
 		zend_hash_internal_pointer_reset_ex(target_hash, &pos);
 		while (zend_hash_get_current_data_ex(target_hash, (void**)&entry, &pos) == SUCCESS) {
