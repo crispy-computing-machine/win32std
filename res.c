@@ -81,7 +81,7 @@ PHP_FUNCTION(res_close)
         RETURN_FALSE;
 
 
-    zend_list_delete(Z_RES_VAL_P(res_rc));
+    zend_list_delete(res_rc);
 
 	RETURN_TRUE;
 }
