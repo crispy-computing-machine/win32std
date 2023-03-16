@@ -39,7 +39,7 @@ PHP_FUNCTION(res_open)
 {
 	HMODULE h_module= NULL;
 	char *module= NULL;
-	long module_len;
+	size_t module_len;
     char buffer[WIN32_STRERROR_BUFFER_LEN];
     //res_resource * res_rc;
 
@@ -100,7 +100,7 @@ PHP_FUNCTION(res_get)
 	HRSRC hr;
 	char *module= NULL, *name= NULL, *type= NULL;
 	size_t name_len, type_len;
-    long lang= MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
+    size_t lang= MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
     char buffer[WIN32_STRERROR_BUFFER_LEN];
     zval *res_rc;
 
@@ -143,7 +143,7 @@ PHP_FUNCTION(res_get)
 
 	size= SizeofResource( h_module, hr );
 
-	RETVAL_STRINGL((char*)rc, size, 1);
+	RETVAL_STRINGL((char*)rc, size);
 }
 /* }}} */
 
@@ -158,7 +158,7 @@ PHP_FUNCTION(res_set)
 	char *module, *type, *name, *data;
 	size_t module_len, type_len, name_len, data_len;
     char buffer[WIN32_STRERROR_BUFFER_LEN];
-    long lang= MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
+    size_t lang= MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
 
 
 /* 	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ssss|l",
@@ -211,26 +211,26 @@ PHP_FUNCTION(res_set)
 
 long php_res_list_get_int_type( const char * string_type )
 {
-	if( !strcmp( string_type, "RT_CURSOR" ) ) return (long)RT_CURSOR;
-	if( !strcmp( string_type, "RT_BITMAP" ) ) return (long)RT_BITMAP;
-	if( !strcmp( string_type, "RT_ICON" ) ) return (long)RT_ICON;
-	if( !strcmp( string_type, "RT_MENU" ) ) return (long)RT_MENU;
-	if( !strcmp( string_type, "RT_DIALOG" ) ) return (long)RT_DIALOG;
-	if( !strcmp( string_type, "RT_STRING" ) ) return (long)RT_STRING;
-	if( !strcmp( string_type, "RT_FONTDIR" ) ) return (long)RT_FONTDIR;
-	if( !strcmp( string_type, "RT_FONT" ) ) return (long)RT_FONT;
-	if( !strcmp( string_type, "RT_ACCELERATOR" ) ) return (long)RT_ACCELERATOR;
-	if( !strcmp( string_type, "RT_RCDATA" ) ) return (long)RT_RCDATA;
-	if( !strcmp( string_type, "RT_MESSAGETABLE" ) ) return (long)RT_MESSAGETABLE;
-	if( !strcmp( string_type, "RT_GROUP_CURSOR" ) ) return (long)RT_GROUP_CURSOR;
-	if( !strcmp( string_type, "RT_GROUP_ICON" ) ) return (long)RT_GROUP_ICON;
-	if( !strcmp( string_type, "RT_VERSION" ) ) return (long)RT_VERSION;
-	if( !strcmp( string_type, "RT_DLGINCLUDE" ) ) return (long)RT_DLGINCLUDE;
-	if( !strcmp( string_type, "RT_PLUGPLAY" ) ) return (long)RT_PLUGPLAY;
-	if( !strcmp( string_type, "RT_VXD" ) ) return (long)RT_VXD;
-	if( !strcmp( string_type, "RT_ANICURSOR" ) ) return (long)RT_ANICURSOR;
-	if( !strcmp( string_type, "RT_ANIICON" ) ) return (long)RT_ANIICON;
-	if( !strcmp( string_type, "RT_HTML" ) ) return (long)RT_HTML;
+	if( !strcmp( string_type, "RT_CURSOR" ) ) return (long long)RT_CURSOR;
+	if( !strcmp( string_type, "RT_BITMAP" ) ) return (long long)RT_BITMAP;
+	if( !strcmp( string_type, "RT_ICON" ) ) return (long long)RT_ICON;
+	if( !strcmp( string_type, "RT_MENU" ) ) return (long long)RT_MENU;
+	if( !strcmp( string_type, "RT_DIALOG" ) ) return (long long)RT_DIALOG;
+	if( !strcmp( string_type, "RT_STRING" ) ) return (long long)RT_STRING;
+	if( !strcmp( string_type, "RT_FONTDIR" ) ) return (long long)RT_FONTDIR;
+	if( !strcmp( string_type, "RT_FONT" ) ) return (long long)RT_FONT;
+	if( !strcmp( string_type, "RT_ACCELERATOR" ) ) return (long long)RT_ACCELERATOR;
+	if( !strcmp( string_type, "RT_RCDATA" ) ) return (long long)RT_RCDATA;
+	if( !strcmp( string_type, "RT_MESSAGETABLE" ) ) return (long long)RT_MESSAGETABLE;
+	if( !strcmp( string_type, "RT_GROUP_CURSOR" ) ) return (long long)RT_GROUP_CURSOR;
+	if( !strcmp( string_type, "RT_GROUP_ICON" ) ) return (long long)RT_GROUP_ICON;
+	if( !strcmp( string_type, "RT_VERSION" ) ) return (long long)RT_VERSION;
+	if( !strcmp( string_type, "RT_DLGINCLUDE" ) ) return (long long)RT_DLGINCLUDE;
+	if( !strcmp( string_type, "RT_PLUGPLAY" ) ) return (long long)RT_PLUGPLAY;
+	if( !strcmp( string_type, "RT_VXD" ) ) return (long long)RT_VXD;
+	if( !strcmp( string_type, "RT_ANICURSOR" ) ) return (long long)RT_ANICURSOR;
+	if( !strcmp( string_type, "RT_ANIICON" ) ) return (long long)RT_ANIICON;
+	if( !strcmp( string_type, "RT_HTML" ) ) return (long long)RT_HTML;
 	//if( !strcmp( string_type, "RT_NOT_DOCUMENTED" ) ) return 241;
 	return -1;
 }
@@ -240,7 +240,7 @@ BOOL CALLBACK php_res_list_callback(
   HMODULE h_module,  // module handle
   LPCTSTR lpszType,  // pointer to resource type
   LPTSTR lpszName,   // pointer to resource name
-  LONG lParam        // application-defined parameter
+  long long lParam        // application-defined parameter
 )
 {
 	char buffer[8];
@@ -248,7 +248,7 @@ BOOL CALLBACK php_res_list_callback(
 	if( !IS_INTRESOURCE(lpszName) )
 		add_next_index_stringl(array, lpszName, 1);
 	else 	{
-		sprintf( buffer, "#%d", lpszName );
+		//sprintf( buffer, "#%d", lpszName ); // debug
 		add_next_index_stringl(array, buffer, 1);
 	}
 	return TRUE;
@@ -287,9 +287,9 @@ PHP_FUNCTION(res_list)
 	array_init( return_value );
 
     if( int_type==-1 ){
-        ret= EnumResourceNames( h_module, type, php_res_list_callback, (LONG)return_value );
+        ret= EnumResourceNames( h_module, type, php_res_list_callback, (long long)return_value );
     } else {
-        ret= EnumResourceNames( h_module, MAKEINTRESOURCE(int_type), php_res_list_callback, (LONG)return_value );
+        ret= EnumResourceNames( h_module, MAKEINTRESOURCE(int_type), php_res_list_callback, (long long)return_value );
     }
 
     if( !ret ) 	{
@@ -311,7 +311,7 @@ PHP_FUNCTION(res_list)
 BOOL CALLBACK php_res_list_type_callback(
   HMODULE hModule,  // resource-module handle
   LPTSTR lpszType,  // pointer to resource type
-  LONG lParam       // application-defined parameter
+  long long lParam       // application-defined parameter
 )
 {
 	zval * array;
@@ -322,7 +322,7 @@ BOOL CALLBACK php_res_list_type_callback(
 	if( !IS_INTRESOURCE(lpszType) )
 		add_next_index_stringl(array, lpszType, 1);
 	else {
-		sprintf( buffer, "#%d", lpszType );
+		//sprintf( buffer, "#%d", lpszType ); // debug
 		add_next_index_stringl(array, buffer, 1);
 	}
 
@@ -333,7 +333,7 @@ BOOL CALLBACK php_res_list_type_callback(
 BOOL CALLBACK php_res_list_type_string_callback(
   HMODULE hModule,  // resource-module handle
   LPTSTR lpszType,  // pointer to resource type
-  LONG lParam       // application-defined parameter
+  long long lParam       // application-defined parameter
 )
 {
 	zval * array;
@@ -346,7 +346,7 @@ BOOL CALLBACK php_res_list_type_string_callback(
         return TRUE;
     }
 #define RES_LIST_TYPE_STRING(type) case type: add_next_index_stringl(array, #type, 1); break;
-	switch( (DWORD)lpszType ) {
+	switch( (DWORD64)lpszType ) {
         RES_LIST_TYPE_STRING(RT_CURSOR)
         RES_LIST_TYPE_STRING(RT_BITMAP)
         RES_LIST_TYPE_STRING(RT_ICON)
@@ -404,9 +404,9 @@ PHP_FUNCTION(res_list_type)
 	array_init( return_value );
 
     if( !as_string ){
-        ret= EnumResourceTypes( h_module, php_res_list_type_callback, (LONG)return_value );
+        ret= EnumResourceTypes( h_module, php_res_list_type_callback, (long long)return_value );
     } else {
-        ret= EnumResourceTypes( h_module, php_res_list_type_string_callback, (LONG)return_value );
+        ret= EnumResourceTypes( h_module, php_res_list_type_string_callback, (long long)return_value );
     }
 
     if( !ret ) {
