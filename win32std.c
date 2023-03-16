@@ -226,7 +226,8 @@ PHP_FUNCTION(win_browse_folder)
 */
 PHP_FUNCTION(win_browse_file)
 {
-    char *ext= NULL, *path= NULL, *file= NULL, *key;
+    char *ext= NULL, *path= NULL, *file= NULL;
+	zend_string *key;
     size_t open=1, ext_len, path_len, file_len, free_filter= 0, key_len, not_string;
 	zval *zfilter= NULL, **entry;
     char fileBuffer[MAX_PATH]= "";
@@ -273,7 +274,7 @@ PHP_FUNCTION(win_browse_file)
 		zend_hash_internal_pointer_reset_ex(target_hash, &pos);
 		while (zend_hash_get_current_data_ex(target_hash, &pos) == SUCCESS) {
 			
-			if( zend_hash_get_current_key_ex(target_hash, &key, &key_len, &key_len, 0, &pos)!=HASH_KEY_IS_STRING ) { 
+			if( entry = zend_hash_get_current_key_ex(target_hash, &key, &key_len, &key_len, &pos)!=HASH_KEY_IS_STRING ) { 
 				not_string= 1; break; 
 			
 			}
@@ -610,7 +611,7 @@ ZEND_MINFO_FUNCTION(win32std)
 PHP_FUNCTION(confirm_win32std_compiled)
 {
 	char *arg = NULL;
-	int arg_len, len;
+	size_t arg_len, len;
 	char string[256];
 
 	//if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &arg, &arg_len) == FAILURE)
