@@ -99,7 +99,7 @@ PHP_FUNCTION(res_get)
 	HMODULE h_module= NULL;
 	HRSRC hr;
 	char *module= NULL, *name= NULL, *type= NULL;
-	long name_len, type_len;
+	size_t name_len, type_len;
     long lang= MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
     char buffer[WIN32_STRERROR_BUFFER_LEN];
     zval *res_rc;
@@ -156,7 +156,7 @@ PHP_FUNCTION(res_set)
 {
 	HANDLE h_module;
 	char *module, *type, *name, *data;
-	int module_len, type_len, name_len, data_len;
+	size_t module_len, type_len, name_len, data_len;
     char buffer[WIN32_STRERROR_BUFFER_LEN];
     long lang= MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
 
@@ -261,7 +261,7 @@ BOOL CALLBACK php_res_list_callback(
 PHP_FUNCTION(res_list)
 {
 	char *module= NULL, *type= NULL;
-	long type_len;
+	size_t type_len;
 	HMODULE h_module= NULL;
 	BOOL ret= FALSE;
 	long int_type=-1;
