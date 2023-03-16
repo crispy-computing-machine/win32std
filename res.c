@@ -244,12 +244,13 @@ BOOL CALLBACK php_res_list_callback(
 )
 {
 	char buffer[8];
+	int buffer_len = 8;
 	zval * array= (zval*) lParam;
 	if( !IS_INTRESOURCE(lpszName) )
-		add_next_index_stringl(array, lpszName, 1);
+		add_next_index_stringl(array, lpszName, buffer_len);
 	else 	{
 		//sprintf( buffer, "#%d", lpszName ); // debug
-		add_next_index_stringl(array, buffer, 1);
+		add_next_index_stringl(array, buffer, buffer_len);
 	}
 	return TRUE;
 }
