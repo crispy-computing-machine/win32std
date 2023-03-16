@@ -271,7 +271,7 @@ PHP_FUNCTION(win_browse_file)
 		target_hash = HASH_OF(zfilter);
 		not_string= 0;
 		zend_hash_internal_pointer_reset_ex(target_hash, &pos);
-		while (zend_hash_get_current_data_ex(target_hash, (void**)&entry, &pos) == SUCCESS) {
+		while (zend_hash_get_current_data_ex(target_hash, &pos) == SUCCESS) {
 			
 			if( zend_hash_get_current_key_ex(target_hash, &key, &key_len, &key_len, 0, &pos)!=HASH_KEY_IS_STRING ) { 
 				not_string= 1; break; 
