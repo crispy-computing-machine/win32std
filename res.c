@@ -368,7 +368,7 @@ BOOL CALLBACK php_res_list_type_string_callback(
         RES_LIST_TYPE_STRING(RT_ANIICON)
         RES_LIST_TYPE_STRING(RT_HTML)
 	default:
-		sprintf( buffer, "#%d", lpszType );
+		// sprintf( buffer, "#%d", lpszType ); //debug
 		add_next_index_stringl(array, buffer, 1);
 		break;
 	}

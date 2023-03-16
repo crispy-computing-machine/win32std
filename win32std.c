@@ -59,7 +59,7 @@ const char * win32_strerror( char * buffer, long buffer_len)
 PHP_FUNCTION(win_play_wav)
 {
 	char *file= NULL;
-	int  file_len=0;
+	size_t  file_len=0;
 	int ret;
 	int default_flags;
 	zend_bool loop= 0;
@@ -100,7 +100,7 @@ PHP_FUNCTION(win_beep)
 {
 	UINT beep_type;
 	char * str= "";
-	int str_len= 0;
+	size_t str_len= 0;
 
 	//if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &str, &str_len ) == FAILURE )
 	ZEND_PARSE_PARAMETERS_START(0, 1)
@@ -146,7 +146,7 @@ PHP_FUNCTION(win_beep)
 PHP_FUNCTION(win_create_link)
 {
     char *file, *link, *args=NULL, *descr=NULL, *workingdir=NULL;
-    int file_len, link_len, args_len, descr_len, workingdir_len;
+    size_t file_len, link_len, args_len, descr_len, workingdir_len;
 
     //if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss|sss", &file, &file_len, &link, &link_len, &args, &args_len, &descr, &descr_len, &workingdir, &workingdir_len) == FAILURE )
 	ZEND_PARSE_PARAMETERS_START(2, 5)
@@ -174,7 +174,7 @@ PHP_FUNCTION(win_create_link)
 PHP_FUNCTION(win_message_box)
 {
     char *text, *caption= "PHP";
-    int text_len, caption_len, type=MB_OK;
+    size_t text_len, caption_len, type=MB_OK;
 
     //if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|ls", &text, &text_len, &type, &caption, &caption_len) == FAILURE )
 	ZEND_PARSE_PARAMETERS_START(1, 3)
@@ -196,7 +196,7 @@ PHP_FUNCTION(win_message_box)
 PHP_FUNCTION(win_browse_folder)
 {
     char *dir=NULL, *caption=NULL, system_dir[MAX_PATH+1]= "";
-    int dir_len, caption_len;
+    size_t dir_len, caption_len;
 
     //if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|ss", &dir, &dir_len, &caption, &caption_len) == FAILURE )
 	ZEND_PARSE_PARAMETERS_START(0, 2)
@@ -227,7 +227,7 @@ PHP_FUNCTION(win_browse_folder)
 PHP_FUNCTION(win_browse_file)
 {
     char *ext= NULL, *path= NULL, *file= NULL, *key;
-    int open=1, ext_len, path_len, file_len, free_filter= 0, key_len, not_string;
+    size_t open=1, ext_len, path_len, file_len, free_filter= 0, key_len, not_string;
 	zval *zfilter= NULL, **entry;
     char fileBuffer[MAX_PATH]= "";
     OPENFILENAME ofn;
