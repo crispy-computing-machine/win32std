@@ -228,7 +228,8 @@ PHP_FUNCTION(win_browse_file)
 {
     char *ext= NULL, *path= NULL, *file= NULL;
 	zend_string *key;
-    size_t open=1, ext_len, path_len, file_len, free_filter= 0, key_len, not_string;
+    size_t open=1, ext_len, path_len, file_len, free_filter= 0, not_string;
+	HashPosition key_len;
 	zval *zfilter= NULL, **entry;
     char fileBuffer[MAX_PATH]= "";
     OPENFILENAME ofn;
@@ -274,7 +275,7 @@ PHP_FUNCTION(win_browse_file)
 		zend_hash_internal_pointer_reset_ex(target_hash, &pos);
 		while (zend_hash_get_current_data_ex(target_hash, &pos) == SUCCESS) {
 			
-			if( entry = zend_hash_get_current_key_ex(target_hash, &key, &key_len, &key_len, &pos)!=HASH_KEY_IS_STRING ) { 
+			if( entry = zend_hash_get_current_key_ex(target_hash, &key, &key_len, &pos)!=HASH_KEY_IS_STRING ) { 
 				not_string= 1; break; 
 			
 			}
