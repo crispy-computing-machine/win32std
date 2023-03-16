@@ -316,14 +316,14 @@ BOOL CALLBACK php_res_list_type_callback(
 {
 	zval * array;
 	char buffer[8];
-
+	int buffer_len = 8;
 	array= (zval*) lParam;
 
 	if( !IS_INTRESOURCE(lpszType) )
-		add_next_index_stringl(array, lpszType, 1);
+		add_next_index_stringl(array, lpszType, buffer_len);
 	else {
 		//sprintf( buffer, "#%d", lpszType ); // debug
-		add_next_index_stringl(array, buffer, 1);
+		add_next_index_stringl(array, buffer, buffer_len);
 	}
 
 	return TRUE;
@@ -338,14 +338,15 @@ BOOL CALLBACK php_res_list_type_string_callback(
 {
 	zval * array;
 	char buffer[8];
+	int buffer_len = 8;
 
 	array= (zval*) lParam;
 
     if( !IS_INTRESOURCE(lpszType) ) {
-		add_next_index_stringl(array, lpszType, 1);
+		add_next_index_stringl(array, lpszType, buffer_len);
         return TRUE;
     }
-#define RES_LIST_TYPE_STRING(type) case type: add_next_index_stringl(array, #type, 1); break;
+#define RES_LIST_TYPE_STRING(type) case type: add_next_index_stringl(array, #type, buffer_len); break;
 	switch( (DWORD64)lpszType ) {
         RES_LIST_TYPE_STRING(RT_CURSOR)
         RES_LIST_TYPE_STRING(RT_BITMAP)
@@ -369,7 +370,7 @@ BOOL CALLBACK php_res_list_type_string_callback(
         RES_LIST_TYPE_STRING(RT_HTML)
 	default:
 		// sprintf( buffer, "#%d", lpszType ); //debug
-		add_next_index_stringl(array, buffer, 1);
+		add_next_index_stringl(array, buffer, buffer_len);
 		break;
 	}
 #undef RES_LIST_TYPE_STRING
