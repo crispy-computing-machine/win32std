@@ -190,6 +190,17 @@ PHP_FUNCTION(res_set)
     strupr(name);
     strupr(type);
 
+	/**
+	* The UpdateResource function uses a LPVOID type to point to the data to be added. 
+	* This is essentially a pointer to any type, and it's a 32-bit pointer. 
+	* This means it can only address up to 4GB of memory. 
+	* So, if you're trying to add a 4GB+ file to an exe, you'll run into issues since UpdateResource won't be able to handle data of this size.
+	* 
+	* The maximum size of a Windows PE file (the format for .exe files) is 4GB.
+	* This is because the fields in the PE header that specify the size of the image are 32 bits.
+	* So even if you could get UpdateResource to handle a 4GB+ file, you wouldn't be able to add this to an exe because it would exceed the maximum file size.
+	* 
+	*/
     h_module= BeginUpdateResource( module, FALSE );
 	if( h_module==NULL ) {
         zend_error(E_WARNING, "res_set: error opening module: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
