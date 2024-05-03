@@ -172,7 +172,7 @@ PHP_FUNCTION(res_set)
 		Z_PARAM_STRING(module, module_len)
 		Z_PARAM_STRING(type, type_len)
 		Z_PARAM_STRING(name, name_len)
-		Z_PARAM_STRING(data, data_len)
+		Z_PARAM_STRING_OR_NULL(data, data_len)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(lang)
 	ZEND_PARSE_PARAMETERS_END();
@@ -209,18 +209,18 @@ PHP_FUNCTION(res_set)
 
 
 	// Update resource. If passing NULL as data, resource will be deleted.
-
-	if(data_len > 0){
-		if( UpdateResource( h_module, type, name, (WORD)lang, data, data_len )==0 ) {
-			zend_error(E_WARNING, "res_set: error updating module: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
-			EndUpdateResource(h_module, TRUE);
-			RETURN_FALSE;
-		}
-	} else {
+	if(data == NULL || data_len == 0) {
 		if( UpdateResource( h_module, type, name, (WORD)lang, NULL, 0)==0 ) {
-	        zend_error(E_WARNING, "res_set: error updating module: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
+	        zend_error(E_WARNING, "res_set: error updating module(1): %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
 	        EndUpdateResource(h_module, TRUE);
 	        RETURN_FALSE;
+		}
+
+	} else {
+		if( UpdateResource( h_module, type, name, (WORD)lang, data, data_len )==0 ) {
+			zend_error(E_WARNING, "res_set: error updating module(2): %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
+			EndUpdateResource(h_module, TRUE);
+			RETURN_FALSE;
 		}
 	}
 

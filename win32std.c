@@ -379,7 +379,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_res_set, 0, 0, 1)
 ZEND_ARG_INFO(0, module)
 ZEND_ARG_INFO(0, type)
 ZEND_ARG_INFO(0, mnameodule)
-ZEND_ARG_INFO(0, data)
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, cwd, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
 // @todo php 8 arginfo
