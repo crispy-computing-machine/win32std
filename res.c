@@ -207,10 +207,21 @@ PHP_FUNCTION(res_set)
 		RETURN_FALSE;
 	}
 
-	if( UpdateResource( h_module, type, name, (WORD)lang, data, data_len )==0 ) {
-        zend_error(E_WARNING, "res_set: error updating module: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
-        EndUpdateResource(h_module, TRUE);
-        RETURN_FALSE;
+
+	// Update resource. If passing NULL as data, resource will be deleted.
+
+	if(data_len > 0){
+		if( UpdateResource( h_module, type, name, (WORD)lang, data, data_len )==0 ) {
+			zend_error(E_WARNING, "res_set: error updating module: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
+			EndUpdateResource(h_module, TRUE);
+			RETURN_FALSE;
+		}
+	} else {
+		if( UpdateResource( h_module, type, name, (WORD)lang, NULL, 0)==0 ) {
+	        zend_error(E_WARNING, "res_set: error updating module: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
+	        EndUpdateResource(h_module, TRUE);
+	        RETURN_FALSE;
+		}
 	}
 
 	EndUpdateResource(h_module, FALSE);
