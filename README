@@ -40,6 +40,11 @@ array res_list_type( resource module [, bool as_string=true] )
 	return the resource type list for a given module
 	as_string specify if known type should be translated to string (but such string can't be used in res_get)
 
+string res_exists( string type, string name[, int lang] )
+	Check if resource exists in the actual module
+	lang is experimental: 0 is neutral, 1 is user default, 2 is system default (see winnt.h LANG_* & SUBLANG_*).
+
+
 win_play_wav( file[, loop])
 	file may be either NULL to stop playback or a file name to start it
 	loop can be set to loop playback (default to false)
