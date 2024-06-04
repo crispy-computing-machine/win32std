@@ -442,3 +442,46 @@ PHP_FUNCTION(res_list_type)
 	}
 }
 /* }}} */
+
+
+/* {{{ proto bool res_exists(string type, string name[, int lang] )
+	Check if a resource exists in the actual module
+	lang is experimental: 0 is neutral, 1 is user default, 2 is system default (see winnt.h LANG_* & SUBLANG_*).
+*/
+PHP_FUNCTION(res_exists)
+{
+	char *name = NULL, *type = NULL;
+	size_t name_len, type_len;
+	size_t lang = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
+	zend_bool lang_isnull = 1;
+	BOOL ret;
+
+	char path[MAXPATHLEN];
+	DWORD pathsize;
+
+	HMODULE h_module = NULL;
+	HRSRC hr;
+
+	ZEND_PARSE_PARAMETERS_START(2, 3)
+		Z_PARAM_STRING(type, type_len)
+		Z_PARAM_STRING(name, name_len)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG_OR_NULL(lang, lang_isnull)
+	ZEND_PARSE_PARAMETERS_END();
+
+	pathsize = GetModuleFileNameA(NULL, path, MAXPATHLEN);
+	path[pathsize] = 0;
+
+	h_module = LoadLibrary(path);
+	if(!h_module) RETURN_BOOL(FALSE);
+
+	if(lang_isnull) hr = FindResource(h_module, name, type);
+	else hr = FindResourceEx(h_module, name, type, (WORD)lang);
+
+	if(hr) ret = TRUE;
+	else ret = FALSE;
+
+	FreeLibrary(h_module);
+	RETURN_BOOL(ret);
+}
+/* }}} */
