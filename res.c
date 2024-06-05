@@ -260,19 +260,19 @@ long php_res_list_get_int_type( const char * string_type )
 
 BOOL CALLBACK php_res_list_callback(
   HMODULE h_module,  // module handle
-  LPCTSTR lpszType,  // pointer to resource type
-  LPTSTR lpszName,   // pointer to resource name
-  long long lParam        // application-defined parameter
+  LPCSTR lpszType,  // pointer to resource type
+  LPSTR lpszName,   // pointer to resource name
+  LONG_PTR lParam        // application-defined parameter
 )
 {
 	char buffer[8];
 	int buffer_len = 8;
 	zval * array= (zval*) lParam;
 	if( !IS_INTRESOURCE(lpszName) )
-		add_next_index_stringl(array, lpszName, strlen(lpszName));
+		add_next_index_string(array, lpszName);
 	else 	{
-		//sprintf( buffer, "#%d", lpszName ); // debug
-		add_next_index_stringl(array, buffer, strlen(lpszName));
+		sprintf( buffer, "#%d", lpszName ); // debug
+		add_next_index_string(array, buffer);
 	}
 	return TRUE;
 }
@@ -310,9 +310,9 @@ PHP_FUNCTION(res_list)
 	array_init( return_value );
 
     if( int_type==-1 ){
-        ret= EnumResourceNames( h_module, type, php_res_list_callback, (long long)return_value );
+        ret= EnumResourceNamesA( h_module, type, php_res_list_callback, (LONG_PTR)return_value );
     } else {
-        ret= EnumResourceNames( h_module, MAKEINTRESOURCE(int_type), php_res_list_callback, (long long)return_value );
+        ret= EnumResourceNamesA( h_module, MAKEINTRESOURCE(int_type), php_res_list_callback, (LONG_PTR)return_value );
     }
 
     if( !ret ) 	{
