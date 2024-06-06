@@ -67,6 +67,7 @@ PHP_FUNCTION(res_list_type);
 PHP_FUNCTION(res_open);
 PHP_FUNCTION(res_close);
 PHP_FUNCTION(res_set);
+PHP_FUNCTION(res_exists);
 
  /* Res stream */
 php_stream *php_res_stream_open(php_stream_wrapper *wrapper, char *path, char *mode, int options, char **opened_path, php_stream_context *context STREAMS_DC);
