@@ -379,8 +379,35 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_res_set, 0, 0, 1)
 ZEND_ARG_INFO(0, module)
 ZEND_ARG_INFO(0, type)
 ZEND_ARG_INFO(0, mnameodule)
-ZEND_ARG_INFO(0, data)
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, cwd, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_res_exists, 0, 2, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, lang, IS_LONG, 1, "null")
+ZEND_END_ARG_INFO()
+
+
+// @todo php 8 arginfo
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_play_wav, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_beep, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_create_link, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_message_box, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_browse_folder, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win_browse_file, 0, 0, 1)
+ZEND_END_ARG_INFO()
+
 
 /* {{{ win32std_functions[]
  *
@@ -390,16 +417,17 @@ zend_function_entry win32std_functions[] = {
 
 	/* Res */
 	PHP_FE(res_get,			arginfo_res_get)
-	PHP_FE(res_list,		    arginfo_res_list)
+	PHP_FE(res_list,		arginfo_res_list)
 	PHP_FE(res_list_type,	arginfo_res_list_type)
 	PHP_FE(res_open,		arginfo_res_open)
 	PHP_FE(res_close,		arginfo_res_close)
 	PHP_FE(res_set,			arginfo_res_set)
+	PHP_FE(res_exists,		arginfo_res_exists)
 
 	/* Win32 */
 	PHP_FE(win_play_wav,		arginfo_win_play_wav)
-	PHP_FE(win_beep,			    arginfo_win_beep)
-	PHP_FE(win_message_box,	arginfo_win_create_link)
+	PHP_FE(win_beep,			arginfo_win_beep)
+	PHP_FE(win_message_box,		arginfo_win_create_link)
 	PHP_FE(win_create_link,		arginfo_win_message_box)
 	PHP_FE(win_browse_folder,	arginfo_win_browse_folder)
 	PHP_FE(win_browse_file,		arginfo_win_browse_file)
@@ -415,19 +443,6 @@ zend_function_entry win32std_functions[] = {
 /* {{{ win32std_module_entry
  */
 zend_module_entry win32std_module_entry = {
-
-ZEND_FE(res_get,arginfo_res_get)
-ZEND_FE(res_get,arginfo_res_list)
-ZEND_FE(res_get,arginfo_list_type)
-ZEND_FE(res_get,arginfo_res_close)
-ZEND_FE(res_get,arginfo_res_set)
-ZEND_FE(res_get,arginfo_win_play_wav)
-ZEND_FE(res_get,arginfo_win_beep)
-ZEND_FE(res_get,arginfo_win_message_box)
-ZEND_FE(res_get,arginfo_win_create_link)
-ZEND_FE(res_get,arginfo_win_browse_folder)
-ZEND_FE(res_get,arginfo_win_browse_file)
-
 #if ZEND_MODULE_API_NO >= 20010901
 	STANDARD_MODULE_HEADER,
 #endif

@@ -172,7 +172,7 @@ PHP_FUNCTION(res_set)
 		Z_PARAM_STRING(module, module_len)
 		Z_PARAM_STRING(type, type_len)
 		Z_PARAM_STRING(name, name_len)
-		Z_PARAM_STRING(data, data_len)
+		Z_PARAM_STRING_OR_NULL(data, data_len)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(lang)
 	ZEND_PARSE_PARAMETERS_END();
@@ -207,10 +207,21 @@ PHP_FUNCTION(res_set)
 		RETURN_FALSE;
 	}
 
-	if( UpdateResource( h_module, type, name, (WORD)lang, data, data_len )==0 ) {
-        zend_error(E_WARNING, "res_set: error updating module: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
-        EndUpdateResource(h_module, TRUE);
-        RETURN_FALSE;
+
+	// Update resource. If passing NULL as data, resource will be deleted.
+	if(data == NULL || data_len == 0) {
+		if( UpdateResource( h_module, type, name, (WORD)lang, NULL, 0)==0 ) {
+	        zend_error(E_WARNING, "res_set: error updating module(1): %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
+	        EndUpdateResource(h_module, TRUE);
+	        RETURN_FALSE;
+		}
+
+	} else {
+		if( UpdateResource( h_module, type, name, (WORD)lang, data, data_len )==0 ) {
+			zend_error(E_WARNING, "res_set: error updating module(2): %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
+			EndUpdateResource(h_module, TRUE);
+			RETURN_FALSE;
+		}
 	}
 
 	EndUpdateResource(h_module, FALSE);
@@ -249,19 +260,19 @@ long php_res_list_get_int_type( const char * string_type )
 
 BOOL CALLBACK php_res_list_callback(
   HMODULE h_module,  // module handle
-  LPCTSTR lpszType,  // pointer to resource type
-  LPTSTR lpszName,   // pointer to resource name
-  long long lParam        // application-defined parameter
+  LPCSTR lpszType,  // pointer to resource type
+  LPSTR lpszName,   // pointer to resource name
+  LONG_PTR lParam        // application-defined parameter
 )
 {
 	char buffer[8];
 	int buffer_len = 8;
 	zval * array= (zval*) lParam;
 	if( !IS_INTRESOURCE(lpszName) )
-		add_next_index_stringl(array, lpszName, strlen(lpszName));
+		add_next_index_string(array, lpszName);
 	else 	{
-		//sprintf( buffer, "#%d", lpszName ); // debug
-		add_next_index_stringl(array, buffer, strlen(lpszName));
+		sprintf( buffer, "#%d", lpszName ); // debug
+		add_next_index_string(array, buffer);
 	}
 	return TRUE;
 }
@@ -299,9 +310,9 @@ PHP_FUNCTION(res_list)
 	array_init( return_value );
 
     if( int_type==-1 ){
-        ret= EnumResourceNames( h_module, type, php_res_list_callback, (long long)return_value );
+        ret= EnumResourceNamesA( h_module, type, php_res_list_callback, (LONG_PTR)return_value );
     } else {
-        ret= EnumResourceNames( h_module, MAKEINTRESOURCE(int_type), php_res_list_callback, (long long)return_value );
+        ret= EnumResourceNamesA( h_module, MAKEINTRESOURCE(int_type), php_res_list_callback, (LONG_PTR)return_value );
     }
 
     if( !ret ) 	{
@@ -429,5 +440,48 @@ PHP_FUNCTION(res_list_type)
 	if( !ret ){
 		RETURN_FALSE;
 	}
+}
+/* }}} */
+
+
+/* {{{ proto bool res_exists(string type, string name[, int lang] )
+	Check if a resource exists in the actual module
+	lang is experimental: 0 is neutral, 1 is user default, 2 is system default (see winnt.h LANG_* & SUBLANG_*).
+*/
+PHP_FUNCTION(res_exists)
+{
+	char *name = NULL, *type = NULL;
+	size_t name_len, type_len;
+	size_t lang = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
+	zend_bool lang_isnull = 1;
+	BOOL ret;
+
+	char path[MAXPATHLEN];
+	DWORD pathsize;
+
+	HMODULE h_module = NULL;
+	HRSRC hr;
+
+	ZEND_PARSE_PARAMETERS_START(2, 3)
+		Z_PARAM_STRING(type, type_len)
+		Z_PARAM_STRING(name, name_len)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG_OR_NULL(lang, lang_isnull)
+	ZEND_PARSE_PARAMETERS_END();
+
+	pathsize = GetModuleFileNameA(NULL, path, MAXPATHLEN);
+	path[pathsize] = 0;
+
+	h_module = LoadLibrary(path);
+	if(!h_module) RETURN_BOOL(FALSE);
+
+	if(lang_isnull) hr = FindResource(h_module, name, type);
+	else hr = FindResourceEx(h_module, name, type, (WORD)lang);
+
+	if(hr) ret = TRUE;
+	else ret = FALSE;
+
+	FreeLibrary(h_module);
+	RETURN_BOOL(ret);
 }
 /* }}} */
