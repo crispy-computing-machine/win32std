@@ -115,7 +115,7 @@ PHP_FUNCTION(res_get)
 
     if( !name_len || !type_len ) {
         zend_error(E_WARNING, "res_get: name or type can't be empty");
-        RETURN_NULL();
+        RETURN_FALSE;
     }
 
 	if((h_module = (HMODULE)zend_fetch_resource(Z_RES_P(res_rc), le_res_resource_name, le_res_resource)) == NULL)
@@ -132,13 +132,13 @@ PHP_FUNCTION(res_get)
         hr= FindResource( h_module, name, type );
 	if( hr==NULL ) {
         zend_error(E_WARNING, "res_get: find '%s/%s' failed: %s", type, name, win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN));
-		RETURN_NULL( );
+		RETURN_FALSE;
 	}
 
 	rc= LoadResource( h_module, hr );
 	if( rc==NULL ) {
         zend_error(E_WARNING, "res_get: load '%s/%s' failed: %s", type, name, win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN));
-		RETURN_NULL( );
+		RETURN_FALSE;
 	}
 
 	size= SizeofResource( h_module, hr );
@@ -399,7 +399,7 @@ PHP_FUNCTION(res_list_type)
 	char *module= NULL;
 	HMODULE h_module= NULL;
 	BOOL ret= FALSE;
-	zend_bool as_string= 1;
+	zend_bool as_string = 1;
     char buffer[WIN32_STRERROR_BUFFER_LEN];
     zval *res_rc;
 

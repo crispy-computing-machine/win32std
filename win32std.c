@@ -382,26 +382,6 @@ ZEND_ARG_INFO(0, mnameodule)
 ZEND_ARG_INFO(0, data)
 ZEND_END_ARG_INFO()
 
-// @todo php 8 arginfo
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_play_wav, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_beep, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_create_link, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_message_box, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_browse_folder, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_browse_file, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-
 /* {{{ win32std_functions[]
  *
  * Every user visible function must have an entry in win32std_functions[].
@@ -435,6 +415,19 @@ zend_function_entry win32std_functions[] = {
 /* {{{ win32std_module_entry
  */
 zend_module_entry win32std_module_entry = {
+
+ZEND_FE(res_get,arginfo_res_get)
+ZEND_FE(res_get,arginfo_res_list)
+ZEND_FE(res_get,arginfo_list_type)
+ZEND_FE(res_get,arginfo_res_close)
+ZEND_FE(res_get,arginfo_res_set)
+ZEND_FE(res_get,arginfo_win_play_wav)
+ZEND_FE(res_get,arginfo_win_beep)
+ZEND_FE(res_get,arginfo_win_message_box)
+ZEND_FE(res_get,arginfo_win_create_link)
+ZEND_FE(res_get,arginfo_win_browse_folder)
+ZEND_FE(res_get,arginfo_win_browse_file)
+
 #if ZEND_MODULE_API_NO >= 20010901
 	STANDARD_MODULE_HEADER,
 #endif

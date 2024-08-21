@@ -28,7 +28,7 @@
 #include <mmsystem.h>
 #include <dsound.h>
 #include <Commdlg.h>
-
+#include "win32std_arginfo.h" // Arg info meta
 
 extern zend_module_entry win32std_module_entry;
 #define phpext_win32std_ptr &win32std_module_entry
