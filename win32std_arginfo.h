@@ -43,7 +43,7 @@ ZEND_END_ARG_INFO()
 
 //function res_set($module, $type, $mnameodule, $data){}
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_set, 0, 1, _IS_BOOL)
-	ZEND_ARG_TYPE_INFO(0, module, IS_RESOURCE, 0)
+	ZEND_ARG_TYPE_INFO(0, module, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_LONG, 0)

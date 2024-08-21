@@ -25,8 +25,7 @@
 #include "php_win32std.h"
 #include "ext/standard/info.h"
 #include "ext/standard/php_smart_string.h"
-
-
+#include "win32std_arginfo.h" // Arg info meta
 
 /* Return the Win32 error string for the last called Win32 function */
 const char * win32_strerror( char * buffer, long buffer_len)
