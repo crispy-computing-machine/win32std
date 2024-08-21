@@ -348,67 +348,6 @@ ZEND_DECLARE_MODULE_GLOBALS(win32std)
 /* True global resources - no need for thread safety here */
 //static int le_win32std;
 
-
-// php 8 arginfo
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_get, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_ARG_INFO(0, type)
-ZEND_ARG_INFO(0, name)
-ZEND_ARG_INFO(0, lang)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_list, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_ARG_INFO(0, type)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_list_type, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_ARG_INFO(0, as_string)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_open, 0, 0, 1)
-ZEND_ARG_INFO(0, module)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_close, 0, 0, 1)
-ZEND_ARG_INFO(0, res_rc)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_res_set, 0, 0, 1)
-ZEND_ARG_INFO(0, module)
-ZEND_ARG_INFO(0, type)
-ZEND_ARG_INFO(0, mnameodule)
-ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, cwd, IS_STRING, 1, "null")
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_res_exists, 0, 2, _IS_BOOL, 0)
-	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, lang, IS_LONG, 1, "null")
-ZEND_END_ARG_INFO()
-
-
-// @todo php 8 arginfo
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_play_wav, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_beep, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_create_link, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_message_box, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_browse_folder, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win_browse_file, 0, 0, 1)
-ZEND_END_ARG_INFO()
-
-
 /* {{{ win32std_functions[]
  *
  * Every user visible function must have an entry in win32std_functions[].

@@ -28,7 +28,7 @@ ZEND_END_ARG_INFO()
 //function res_list_type($res_rc, $as_string){}
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_list_type, 0, 1, MAY_BE_ARRAY|MAY_BE_FALSE)
 	ZEND_ARG_TYPE_INFO(0, res_rc, IS_RESOURCE, 0)
-	ZEND_ARG_TYPE_INFO(0, as_string, IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO(0, as_string, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
 //function res_open($module){}
@@ -52,7 +52,7 @@ ZEND_END_ARG_INFO()
 //function win_play_wav(){}
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_play_wav, 0, 1, _IS_BOOL)
 	ZEND_ARG_TYPE_INFO(0, file, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, loop, IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO(0, loop, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
 //function win_beep(){}
@@ -77,13 +77,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_create_link, 0, 1, _IS_BOOL)
 ZEND_END_ARG_INFO()
 
 //function win_browse_folder(){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_create_link, 0, 1, IS_STRING)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_browse_folder, 0, 1, IS_STRING)
 	ZEND_ARG_TYPE_INFO(0, dir, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, caption, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 //function win_browse_file(){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_create_link, 0, 1, MAY_BE_STRING|MAY_BE_NULL)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_browse_file, 0, 1, MAY_BE_STRING|MAY_BE_NULL)
 	ZEND_ARG_TYPE_INFO(0, open, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, file, IS_STRING, 0)
