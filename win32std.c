@@ -346,6 +346,20 @@ ZEND_DECLARE_MODULE_GLOBALS(win32std)
 /* True global resources - no need for thread safety here */
 //static int le_win32std;
 
+ZEND_FUNCTION(res_get);
+ZEND_FUNCTION(res_list);
+ZEND_FUNCTION(res_list_type);
+ZEND_FUNCTION(res_open);
+ZEND_FUNCTION(res_close);
+ZEND_FUNCTION(res_set);
+ZEND_FUNCTION(res_exists);
+ZEND_FUNCTION(win_play_wav);
+ZEND_FUNCTION(win_beep);
+ZEND_FUNCTION(win_message_box);
+ZEND_FUNCTION(win_create_link);
+ZEND_FUNCTION(win_browse_folder);
+ZEND_FUNCTION(win_browse_file);
+
 // 					See: https://github.com/php/php-src/blob/master/Zend/zend_API.h
 
 // ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(name, return_reference, required_num_args, MAY_BE_STRING|MAY_BE_BOOL)
@@ -364,7 +378,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_get, 0, 4, MAY_BE_STRING|MAY
 	ZEND_ARG_TYPE_INFO(0, res_rc, IS_RESOURCE, 0)
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, lang, IS_LONG, 0)
+	ZEND_ARG_TYPE_MASK(0, lang, MAY_BE_LONG|MAY_BE_NULL, "")
 ZEND_END_ARG_INFO()
 
 //function res_list($res_rc, $type){}
@@ -444,20 +458,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_exists, 0, 3, _IS_BOOL)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, lang, IS_LONG, 0)
 ZEND_END_ARG_INFO()
-
-ZEND_FUNCTION(res_get);
-ZEND_FUNCTION(res_list);
-ZEND_FUNCTION(res_list_type);
-ZEND_FUNCTION(res_open);
-ZEND_FUNCTION(res_close);
-ZEND_FUNCTION(res_set);
-ZEND_FUNCTION(res_exists);
-ZEND_FUNCTION(win_play_wav);
-ZEND_FUNCTION(win_beep);
-ZEND_FUNCTION(win_message_box);
-ZEND_FUNCTION(win_create_link);
-ZEND_FUNCTION(win_browse_folder);
-ZEND_FUNCTION(win_browse_file);
 
 /* {{{ win32std_functions[]
  *
