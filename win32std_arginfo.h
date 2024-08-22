@@ -12,13 +12,10 @@
 // function res_get($res_rc, $type, $name, $lang){}
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_get, 0, 4, MAY_BE_STRING|MAY_BE_BOOL)
 
-
-        ZEND_ARG_TYPE_INFO(0, res_rc, IS_RESOURCE, 0)
-//		Z_PARAM_RESOURCE(res_rc)
-//		Z_PARAM_STRING(type, type_len)
-//		Z_PARAM_STRING(name, name_len)
-//		Z_PARAM_OPTIONAL
-//		Z_PARAM_LONG(lang)
+	ZEND_ARG_INFO(0, res_rc)
+	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, lang, IS_STRING, 0)
 
 ZEND_END_ARG_INFO()
 
