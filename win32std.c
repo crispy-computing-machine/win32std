@@ -445,6 +445,20 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_exists, 0, 1, _IS_BOOL)
 	ZEND_ARG_TYPE_MASK(0, lang, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_FUNCTION(res_get);
+ZEND_FUNCTION(res_list);
+ZEND_FUNCTION(res_list_type);
+ZEND_FUNCTION(res_open);
+ZEND_FUNCTION(res_close);
+ZEND_FUNCTION(res_set);
+ZEND_FUNCTION(res_exists);
+ZEND_FUNCTION(win_play_wav);
+ZEND_FUNCTION(win_beep);
+ZEND_FUNCTION(win_message_box);
+ZEND_FUNCTION(win_create_link);
+ZEND_FUNCTION(win_browse_folder);
+ZEND_FUNCTION(win_browse_file);
+
 /* {{{ win32std_functions[]
  *
  * Every user visible function must have an entry in win32std_functions[].
