@@ -16,7 +16,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_get, 0, 3, MAY_BE_STRING|MAY
 	ZEND_ARG_INFO(0, res_rc)
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, lang, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, lang, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
 //function res_list($res_rc, $type){}
@@ -28,7 +28,7 @@ ZEND_END_ARG_INFO()
 //function res_list_type($res_rc, $as_string){}
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_list_type, 0, 1, MAY_BE_ARRAY|MAY_BE_FALSE)
 	ZEND_ARG_INFO(0, res_rc)
-	ZEND_ARG_TYPE_INFO(0, as_string, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO(0, as_string, _IS_BOOL, 1)
 ZEND_END_ARG_INFO()
 
 //function res_open($module){}
@@ -53,7 +53,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_exists, 0, 3, _IS_BOOL)
 	ZEND_ARG_INFO(0, res_rc)
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, lang, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, lang, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
 //function win_play_wav(){}
@@ -68,32 +68,32 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_beep, 0, 1, _IS_BOOL)
 ZEND_END_ARG_INFO()
 
 //function win_message_box(){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_message_box, 0, 3, IS_LONG)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_message_box, 0, 1, IS_LONG)
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, type, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, caption, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, type, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(0, caption, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
 //function win_create_link(){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_create_link, 0, 5, _IS_BOOL)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_create_link, 0, 2, _IS_BOOL)
 	ZEND_ARG_TYPE_INFO(0, file, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, link, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, args, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, descr, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, workingdir, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, args, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, descr, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, workingdir, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
 //function win_browse_folder(){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_browse_folder, 0, 2, IS_STRING)
-	ZEND_ARG_TYPE_INFO(0, dir, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, caption, IS_STRING, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_browse_folder, 0, 0, IS_STRING)
+	ZEND_ARG_TYPE_INFO(0, dir, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, caption, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
 //function win_browse_file(){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_browse_file, 0, 4, MAY_BE_STRING|MAY_BE_NULL)
-	ZEND_ARG_TYPE_INFO(0, open, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, file, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, ext, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, zfilter, MAY_BE_STRING|MAY_BE_ARRAY, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_browse_file, 0, 0, MAY_BE_STRING|MAY_BE_NULL)
+	ZEND_ARG_TYPE_INFO(0, open, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, file, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, ext, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, zfilter, MAY_BE_STRING|MAY_BE_ARRAY, 1)
 ZEND_END_ARG_INFO()
