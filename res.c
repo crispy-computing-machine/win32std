@@ -158,8 +158,8 @@ PHP_FUNCTION(res_set)
 	char *module, *type, *name, *data;
 	size_t module_len, type_len, name_len, data_len;
     char buffer[WIN32_STRERROR_BUFFER_LEN];
-    size_t lang= MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
-
+    size_t lang = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
+	zend_bool lang_isnull = 1;
 
 /* 	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ssss|l",
 		&module, &module_len,
@@ -174,7 +174,7 @@ PHP_FUNCTION(res_set)
 		Z_PARAM_STRING(name, name_len)
 		Z_PARAM_STRING_OR_NULL(data, data_len)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_LONG(lang)
+        Z_PARAM_LONG_OR_NULL(lang, lang_isnull)
 	ZEND_PARSE_PARAMETERS_END();
 
 
