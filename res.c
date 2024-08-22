@@ -451,7 +451,7 @@ PHP_FUNCTION(res_list_type)
 PHP_FUNCTION(res_exists)
 {
 	char *name = NULL, *type = NULL;
-	size_t name_len, type_len;
+	size_t name_len, type_len, path_len;
 	size_t lang = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
 	zend_bool lang_isnull = 1;
 	BOOL ret;
@@ -463,6 +463,7 @@ PHP_FUNCTION(res_exists)
 	HRSRC hr;
 
 	ZEND_PARSE_PARAMETERS_START(2, 3)
+		Z_PARAM_STRING(path, path_len)
 		Z_PARAM_STRING(type, type_len)
 		Z_PARAM_STRING(name, name_len)
 		Z_PARAM_OPTIONAL
