@@ -16,7 +16,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_get, 0, 3, MAY_BE_STRING|MAY
 	ZEND_ARG_INFO(0, res_rc)
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, lang, IS_STRING, 1)
+	ZEND_ARG_TYPE_MASK(0, lang, MAY_BE_STRING|MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 //function res_list($res_rc, $type){}
