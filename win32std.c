@@ -360,7 +360,7 @@ ZEND_DECLARE_MODULE_GLOBALS(win32std)
 // ZEND_END_ARG_INFO()
 
 // function res_get($res_rc, $type, $name, $lang){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_res_get, 0, 4, IS_STRING, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_get, 0, 4, MAY_BE_STRING|MAY_BE_BOOL, 0)
     ZEND_ARG_TYPE_INFO(0, res_rc, IS_RESOURCE, 0)
     ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
     ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
