@@ -360,6 +360,33 @@ ZEND_FUNCTION(win_create_link);
 ZEND_FUNCTION(win_browse_folder);
 ZEND_FUNCTION(win_browse_file);
 
+/* {{{ win32std_functions[]
+ *
+ * Every user visible function must have an entry in win32std_functions[].
+ */
+zend_function_entry win32std_functions[] = {
+
+	/* Res */
+	PHP_FE(res_get,			arginfo_res_get)
+	PHP_FE(res_list,		arginfo_res_list)
+	PHP_FE(res_list_type,	arginfo_res_list_type)
+	PHP_FE(res_open,		arginfo_res_open)
+	PHP_FE(res_close,		arginfo_res_close)
+	PHP_FE(res_set,			arginfo_res_set)
+	PHP_FE(res_exists,		arginfo_res_exists)
+
+	/* Win32 */
+	PHP_FE(win_play_wav,		arginfo_win_play_wav)
+	PHP_FE(win_beep,			arginfo_win_beep)
+	PHP_FE(win_message_box,		arginfo_win_message_box)
+	PHP_FE(win_create_link,		arginfo_win_create_link)
+	PHP_FE(win_browse_folder,	arginfo_win_browse_folder)
+	PHP_FE(win_browse_file,		arginfo_win_browse_file)
+
+    {NULL, NULL, NULL}	/* Must be the last line in win32std_functions[] */
+};
+/* }}} */
+
 // 					See: https://github.com/php/php-src/blob/master/Zend/zend_API.h
 
 // ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(name, return_reference, required_num_args, MAY_BE_STRING|MAY_BE_BOOL)
@@ -460,32 +487,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_res_exists, 0, 0, 3)
     ZEND_ARG_TYPE_INFO(0, lang, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-/* {{{ win32std_functions[]
- *
- * Every user visible function must have an entry in win32std_functions[].
- */
-zend_function_entry win32std_functions[] = {
-
-	/* Res */
-	PHP_FE(res_get,			arginfo_res_get)
-	PHP_FE(res_list,		arginfo_res_list)
-	PHP_FE(res_list_type,	arginfo_res_list_type)
-	PHP_FE(res_open,		arginfo_res_open)
-	PHP_FE(res_close,		arginfo_res_close)
-	PHP_FE(res_set,			arginfo_res_set)
-	PHP_FE(res_exists,		arginfo_res_exists)
-
-	/* Win32 */
-	PHP_FE(win_play_wav,		arginfo_win_play_wav)
-	PHP_FE(win_beep,			arginfo_win_beep)
-	PHP_FE(win_message_box,		arginfo_win_message_box)
-	PHP_FE(win_create_link,		arginfo_win_create_link)
-	PHP_FE(win_browse_folder,	arginfo_win_browse_folder)
-	PHP_FE(win_browse_file,		arginfo_win_browse_file)
-
-    {NULL, NULL, NULL}	/* Must be the last line in win32std_functions[] */
-};
-/* }}} */
 
 #if ZEND_MODULE_API_NO < 20010901
 # error Module made for PHP 4.1.x
