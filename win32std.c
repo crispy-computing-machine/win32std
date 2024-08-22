@@ -467,21 +467,21 @@ ZEND_FUNCTION(win_browse_file);
 zend_function_entry win32std_functions[] = {
 
 	/* Res */
-	PHP_FE(res_get,			arginfo_res_get)
-	PHP_FE(res_list,		arginfo_res_list)
-	PHP_FE(res_list_type,	arginfo_res_list_type)
-	PHP_FE(res_open,		arginfo_res_open)
-	PHP_FE(res_close,		arginfo_res_close)
-	PHP_FE(res_set,			arginfo_res_set)
-	PHP_FE(res_exists,		arginfo_res_exists)
+	ZEND_FE(res_get,			arginfo_res_get)
+	ZEND_FE(res_list,		arginfo_res_list)
+	ZEND_FE(res_list_type,	arginfo_res_list_type)
+	ZEND_FE(res_open,		arginfo_res_open)
+	ZEND_FE(res_close,		arginfo_res_close)
+	ZEND_FE(res_set,			arginfo_res_set)
+	ZEND_FE(res_exists,		arginfo_res_exists)
 
 	/* Win32 */
-	PHP_FE(win_play_wav,		arginfo_win_play_wav)
-	PHP_FE(win_beep,			arginfo_win_beep)
-	PHP_FE(win_message_box,		arginfo_win_message_box)
-	PHP_FE(win_create_link,		arginfo_win_create_link)
-	PHP_FE(win_browse_folder,	arginfo_win_browse_folder)
-	PHP_FE(win_browse_file,		arginfo_win_browse_file)
+	ZEND_FE(win_play_wav,		arginfo_win_play_wav)
+	ZEND_FE(win_beep,			arginfo_win_beep)
+	ZEND_FE(win_message_box,		arginfo_win_message_box)
+	ZEND_FE(win_create_link,		arginfo_win_create_link)
+	ZEND_FE(win_browse_folder,	arginfo_win_browse_folder)
+	ZEND_FE(win_browse_file,		arginfo_win_browse_file)
 
     {NULL, NULL, NULL}	/* Must be the last line in win32std_functions[] */
 };
