@@ -37,12 +37,12 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_open, 0, 1, MAY_BE_RESOURCE|
 ZEND_END_ARG_INFO()
 
 //function res_close($res_rc){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_close, 0, 1, _IS_BOOL)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_res_close, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_INFO(0, res_rc)
 ZEND_END_ARG_INFO()
 
 //function res_set($module, $type, $mnameodule, $data){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_set, 0, 4, _IS_BOOL)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_res_set, 0, 4, _IS_BOOL, 0)
 	ZEND_ARG_INFO(0, module)
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
@@ -50,7 +50,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_set, 0, 4, _IS_BOOL)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, lang, IS_LONG, 1, "0")
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_exists, 0, 4, _IS_BOOL)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_res_exists, 0, 4, _IS_BOOL, 0)
 	ZEND_ARG_INFO(0, res_rc)
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
@@ -58,13 +58,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_exists, 0, 4, _IS_BOOL)
 ZEND_END_ARG_INFO()
 
 //function win_play_wav(){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_play_wav, 0, 2, _IS_BOOL)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win_play_wav, 0, 2, _IS_BOOL, 0)
 	ZEND_ARG_TYPE_INFO(0, file, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, loop, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
 //function win_beep(){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_beep, 0, 1, _IS_BOOL)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win_beep, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
@@ -76,7 +76,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_message_box, 0, 3, IS_LONG)
 ZEND_END_ARG_INFO()
 
 //function win_create_link(){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_win_create_link, 0, 5, _IS_BOOL)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win_create_link, 0, 5, _IS_BOOL, 0)
 	ZEND_ARG_TYPE_INFO(0, file, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, link, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, args, IS_STRING, 1)
