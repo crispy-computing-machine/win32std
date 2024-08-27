@@ -3,7 +3,7 @@
 
 
 	/* Message box exemple */
-	if( win_message_box( "Hey !\n\nThis is win32std extension test\n\nAre you realy sure you want to start it ?", MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 )!=MB_IDYES ) return FALSE;
+	if( win_message_box( "Hey !\n\nThis is win32std extension test\n\nAre you realy sure you want to start it ?", MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2, 'Start?' )!=MB_IDYES ) return FALSE;
 
 
 	/* Browse exemple */
