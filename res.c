@@ -123,8 +123,8 @@ PHP_FUNCTION(res_get)
 
 
     // Convert name and type to uppercase since lowercase don't work
-    //strupr(name);
-    //strupr(type);
+    strupr(name);
+    strupr(type);
 
     if( ZEND_NUM_ARGS()>3 )
         hr= FindResourceEx( h_module, name, type, (WORD)lang );
@@ -187,8 +187,8 @@ PHP_FUNCTION(res_set)
 	}
 
     // Convert name and type to uppercase since lowercase don't work
-    //strupr(name);
-    //strupr(type);
+    strupr(name);
+    strupr(type);
 
 	/**
 	* The UpdateResource function uses a LPVOID type to point to the data to be added. 
