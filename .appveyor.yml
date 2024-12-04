@@ -16,9 +16,11 @@ install:
     }
 
     echo "Download PHP 8 binary tools"
-    $bname = 'php-sdk-' + $env:BIN_SDK_VER + '.zip'
+    $bname = 'php-sdk-binary-tools-php-sdk-' + $env:BIN_SDK_VER + '.zip'
+    $bpath = 'php-sdk-' + $env:BIN_SDK_VER
+    echo "Downloading: https://github.com/php/php-sdk-binary-tools/releases/download/$bpath/$bname"
     if (-not (Test-Path c:\build-cache\$bname)) {
-            Invoke-WebRequest "https://github.com/OSTC/php-sdk-binary-tools/archive/$bname" -OutFile "c:\build-cache\$bname"
+            Invoke-WebRequest "https://github.com/php/php-sdk-binary-tools/releases/download/$bpath/$bname" -OutFile "c:\build-cache\$bname"
     }
     $dname0 = 'php-sdk-binary-tools-php-sdk-' + $env:BIN_SDK_VER
     $dname1 = 'php-sdk-' + $env:BIN_SDK_VER
@@ -36,13 +38,12 @@ cache:
   c:\build-cache -> .appveyor.yml
 
 environment:
-  BIN_SDK_VER: 2.2.0
-  PTHREADS_VER: 2.9.1
+  BIN_SDK_VER: 2.3.0
   matrix:
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
       ARCH: x64
-      VC: vs16
-      PHP_VER: 8.3.2
+      VC: vs17
+      PHP_VER: 8.4.1
       TS: 1
 
 build_script:
