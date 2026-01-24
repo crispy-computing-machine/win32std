@@ -1,5 +1,8 @@
 This extension allow access to some Win32 usefull API.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/9lhnogatvq4aunki/branch/master?svg=true)](https://ci.appveyor.com/project/Stefan54845/win32std/branch/master)
+
+PHP 8.4 ✅
 
 Summary
 ----------
