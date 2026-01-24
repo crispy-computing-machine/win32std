@@ -43,7 +43,7 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
       ARCH: x64
       VC: vs17
-      PHP_VER: 8.4.1
+      PHP_VER: 8.4.17
       TS: 1
 
 build_script:
@@ -52,11 +52,11 @@ build_script:
     $ts_part = ''
     if ('0' -eq $env:TS) { $ts_part = '-nts' }
     $bname = 'php-devel-pack-' + $env:PHP_VER + $ts_part + '-Win32-' + $env:VC.toUpper() + '-' + $env:ARCH + '.zip'
-    echo "Download PHP8 development pack from release http://windows.php.net/downloads/releases/$bname"
+    echo "Download PHP8 development pack from release downloads.brittainmedia.co.uk/$bname"
     if (-not (Test-Path c:\build-cache\$bname)) {
-            Invoke-WebRequest "http://windows.php.net/downloads/releases/$bname" -OutFile "c:\build-cache\$bname"
+            Invoke-WebRequest "downloads.brittainmedia.co.uk/$bname" -OutFile "c:\build-cache\$bname"
             if (-not (Test-Path c:\build-cache\$bname)) {
-                    Invoke-WebRequest "http://windows.php.net/downloads/releases/$bname" -OutFile "c:\build-cache\$bname"
+                    Invoke-WebRequest "downloads.brittainmedia.co.uk/$bname" -OutFile "c:\build-cache\$bname"
             }
     }
     
