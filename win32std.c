@@ -224,14 +224,14 @@ PHP_FUNCTION(win_browse_file)
 {
     char *ext= NULL, *path= NULL, *file= NULL;
 	zend_string *key;
-    size_t open=1, ext_len, path_len, file_len, free_filter= 0, not_string;
-	HashPosition key_len;
-	zval *zfilter= NULL, **entry;
+    zend_long open=1;
+    size_t ext_len = 0, path_len = 0, file_len = 0, free_filter= 0, not_string;
+	zend_ulong index;
+	zval *zfilter= NULL, *entry;
     char fileBuffer[MAX_PATH]= "";
     OPENFILENAME ofn;
     BOOL res;
 	HashTable *target_hash;
- 	HashPosition pos;
 	smart_string smart_filter= {0};
 
     //if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|lsssz", &open, &path, &path_len, &file, &file_len, &ext, &ext_len, &zfilter) == FAILURE )
@@ -268,27 +268,22 @@ PHP_FUNCTION(win_browse_file)
 
 		target_hash = HASH_OF(zfilter);
 		not_string= 0;
-		zend_hash_internal_pointer_reset_ex(target_hash, &pos);
-		while (zend_hash_get_current_data_ex(target_hash, &pos) == SUCCESS) {
-			
-			if( entry = zend_hash_get_current_key_ex(target_hash, &key, &key_len, &pos)!=HASH_KEY_IS_STRING ) { 
-				not_string= 1; break; 
-			
+		ZEND_HASH_FOREACH_KEY_VAL(target_hash, index, key, entry) {
+			if (key == NULL) {
+				not_string = 1;
+				break;
 			}
 
-			if( Z_TYPE_P(*entry)!=IS_STRING ) { /*not_string= 1;*/
-				zend_error( E_WARNING, "win_browse_file: filter key '%s' must have a string value", key );
-				zend_hash_move_forward_ex(target_hash, &pos);
+			if (Z_TYPE_P(entry) != IS_STRING) {
+				zend_error(E_WARNING, "win_browse_file: filter key '%s' must have a string value", ZSTR_VAL(key));
 				continue;
 			}
 
-			smart_string_appends( &smart_filter, key );
-			smart_string_appendc( &smart_filter, '\0' );
-			smart_string_appends( &smart_filter, Z_STRVAL_P(*entry) );
-			smart_string_appendc( &smart_filter, '\0' );
-
-			zend_hash_move_forward_ex(target_hash, &pos);
-		}
+			smart_string_appends(&smart_filter, ZSTR_VAL(key));
+			smart_string_appendc(&smart_filter, '\0');
+			smart_string_appends(&smart_filter, Z_STRVAL_P(entry));
+			smart_string_appendc(&smart_filter, '\0');
+		} ZEND_HASH_FOREACH_END();
 		if(not_string ) {
 			zend_error( E_WARNING, "win_browse_file: filter must be an associative array, or just use a string isntead HTML File\0*.htm;*.html\0INI file\0*.ini\0All files\0*.*\0\0" );
 			smart_string_free(&smart_filter);
