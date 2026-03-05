@@ -44,7 +44,7 @@ static size_t php_res_read(php_stream *stream, char *buf, size_t count)
 	return read;
 }
 
-static int php_res_seek(php_stream *stream, off_t offset, int whence, off_t *newoffs)
+static int php_res_seek(php_stream *stream, zend_off_t offset, int whence, zend_off_t *newoffs)
 {
 	res_stream_data *self = (res_stream_data *)stream->abstract;
     
@@ -92,8 +92,8 @@ php_stream_ops php_res_stream_ops = {
 };
 
 
-php_stream *php_res_stream_open(php_stream_wrapper *wrapper, char *path, char *mode,
-		int options, char **opened_path, php_stream_context *context STREAMS_DC);
+php_stream *php_res_stream_open(php_stream_wrapper *wrapper, const char *path, const char *mode,
+		int options, zend_string **opened_path, php_stream_context *context STREAMS_DC);
 
 /* Wrapper operation entry */
 static php_stream_wrapper_ops php_res_wrapper_ops = {
@@ -122,13 +122,13 @@ php_stream_wrapper php_res_stream_wrapper =	{
     "res://c:\adir\another\file.dll/TYPE/NAME"
 */
 
-php_stream *php_res_stream_open(php_stream_wrapper *wrapper, char *path, char *mode,
-		int options, char **opened_path, php_stream_context *context STREAMS_DC)
+php_stream *php_res_stream_open(php_stream_wrapper *wrapper, const char *path, const char *mode,
+		int options, zend_string **opened_path, php_stream_context *context STREAMS_DC)
 {
 	res_stream_data *self;
 	php_stream *stream = NULL;
     char *ptr, *type, *name, buffer[WIN32_STRERROR_BUFFER_LEN], *path_copy;
-    int path_len;
+    size_t path_len;
 	HRSRC hr;
 
 	/* check: read only */
@@ -150,7 +150,7 @@ php_stream *php_res_stream_open(php_stream_wrapper *wrapper, char *path, char *m
 
     // can't end with /
     path_len= strlen(path_copy);
-    if( path_copy[path_len-1]=='/' ) path_copy[path_len]= 0;
+    if( path_len > 0 && path_copy[path_len-1]=='/' ) path_copy[path_len-1]= 0;
 
     // search name
     ptr= path_copy;
@@ -201,7 +201,7 @@ php_stream *php_res_stream_open(php_stream_wrapper *wrapper, char *path, char *m
 		return NULL;
 	}
 
-	self->data= LoadResource( self->module, hr );
+	self->data= (char *) LoadResource( self->module, hr );
 	if( self->data==NULL ) {
         zend_error(E_WARNING, "load '%s/%s' failed: %s", type, name, win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN));
         if( self->module ) FreeLibrary(self->module);
