@@ -12,7 +12,7 @@
 // ZEND_END_ARG_INFO()
 
 // function res_get($res_rc, $type, $name, $lang){}
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_get, 0, 4, MAY_BE_STRING|MAY_BE_FALSE)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_get, 0, 3, MAY_BE_STRING|MAY_BE_FALSE)
 	ZEND_ARG_INFO(0, res_rc)
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
@@ -28,7 +28,7 @@ ZEND_END_ARG_INFO()
 //function res_list_type($res_rc, $as_string){}
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_res_list_type, 0, 1, MAY_BE_ARRAY|MAY_BE_FALSE)
 	ZEND_ARG_INFO(0, res_rc)
-	ZEND_ARG_TYPE_INFO(0, as_string, _IS_BOOL, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, as_string, _IS_BOOL, 0, "true")
 ZEND_END_ARG_INFO()
 
 //function res_open($module){}
@@ -43,14 +43,14 @@ ZEND_END_ARG_INFO()
 
 //function res_set($module, $type, $mnameodule, $data){}
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_res_set, 0, 4, _IS_BOOL, 0)
-	ZEND_ARG_INFO(0, module)
+	ZEND_ARG_TYPE_INFO(0, module, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, data, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, data, IS_STRING, 1)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, lang, IS_LONG, 1, "0")
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_res_exists, 0, 4, _IS_BOOL, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_res_exists, 0, 3, _IS_BOOL, 0)
 	ZEND_ARG_INFO(0, res_rc)
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
