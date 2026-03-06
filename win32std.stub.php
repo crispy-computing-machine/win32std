@@ -99,15 +99,15 @@ function res_list($res_rc, string $type) : array|false{}
  * @param bool|null $as_string
  * @return array|false
  */
-function res_list_type($res_rc, ?bool $as_string) : array|false{}
+function res_list_type($res_rc, bool $as_string = true) : array|false{}
 
 /**
  * Return a (PHP)resource that identify the (WIN)resource module handle.
  * A module is either a dll file or an exe file.
  * @param string $module
- * @return false
+ * @return resource|false
  */
-function res_open(string $module) : false{}
+function res_open(string $module) : mixed{}
 
 /**
  * Close a module handle
@@ -125,14 +125,14 @@ function res_close($res_rc) : bool{}
  * @param $module
  * @param string $type
  * @param string $name
- * @param int $data
+ * @param string|null $data
  * @param int|null $lang
  * @return bool
  */
-function res_set($module, string $type, string $name, int $data, ?int $lang = 0) : bool{}
+function res_set(string $module, string $type, string $name, ?string $data, ?int $lang = 0) : bool{}
 
 /**
- * Check if resource exists in the actual module
+ * Check if resource exists in a module opened with res_open
  * lang is experimental: 0 is neutral, 1 is user default, 2 is system default (see winnt.h LANG_* & SUBLANG_*).
  *
  * @param $res_rc

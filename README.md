@@ -29,9 +29,10 @@ string res_get( resource module, string type, string name[, int lang] )
 	lang is experimental: 0 is neutral, 1 is user default, 2 is system default (see winnt.h LANG_* & SUBLANG_*).
 
 
-bool res_set( string file, string type, string name, string data[, int lang] )
+bool res_set( string file, string type, string name, ?string data[, int lang] )
 	Add or modify a resource in 'file' (dll or exe)
 	lang is experimental: 0 is neutral, 1 is user default, 2 is system default (see winnt.h LANG_* & SUBLANG_*).
+	Pass NULL (or an empty string) for data to delete the resource entry.
 	Fail if the file is in use.
 
 
@@ -41,11 +42,12 @@ array res_list( resource module, string type )
 
 array res_list_type( resource module [, bool as_string=true] )
 	return the resource type list for a given module
-	as_string specify if known type should be translated to string (but such string can't be used in res_get)
+	as_string specify if known type should be translated to string names.
+	Unknown numeric type identifiers are always returned as "#<id>".
 
 
-string res_exists( string type, string name[, int lang] )
-	Check if resource exists in the actual module
+bool res_exists( resource module, string type, string name[, int lang] )
+	Check if a resource exists in a module opened by res_open
 	lang is experimental: 0 is neutral, 1 is user default, 2 is system default (see winnt.h LANG_* & SUBLANG_*).
 
 

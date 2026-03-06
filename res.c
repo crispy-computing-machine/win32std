@@ -18,6 +18,7 @@
 
 
 #include "php_win32std.h"
+#include <malloc.h>
 
 #ifndef IS_INTRESOURCE
 #define IS_INTRESOURCE(_r) (((DWORD)(_r) >> 16) == 0)
@@ -99,12 +100,12 @@ PHP_FUNCTION(res_get)
 	HMODULE h_module= NULL;
 	HRSRC hr;
 	char *module= NULL, *name= NULL, *type= NULL;
+	char *name_upper = NULL, *type_upper = NULL;
 	size_t name_len, type_len;
     size_t lang= MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
     char buffer[WIN32_STRERROR_BUFFER_LEN];
     zval *res_rc;
 
-	//if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rss|l", &res_rc, &type, &type_len, &name, &name_len, &lang ) == FAILURE )
 	ZEND_PARSE_PARAMETERS_START(3, 4)
 		Z_PARAM_RESOURCE(res_rc)
 		Z_PARAM_STRING(type, type_len)
@@ -121,15 +122,17 @@ PHP_FUNCTION(res_get)
 	if((h_module = (HMODULE)zend_fetch_resource(Z_RES_P(res_rc), le_res_resource_name, le_res_resource)) == NULL)
 		RETURN_FALSE;
 
-
-    // Convert name and type to uppercase since lowercase don't work
-    strupr(name);
-    strupr(type);
+	name_upper = (char *)_alloca(name_len + 1);
+	type_upper = (char *)_alloca(type_len + 1);
+	memcpy(name_upper, name, name_len + 1);
+	memcpy(type_upper, type, type_len + 1);
+    strupr(name_upper);
+    strupr(type_upper);
 
     if( ZEND_NUM_ARGS()>3 )
-        hr= FindResourceEx( h_module, name, type, (WORD)lang );
+        hr= FindResourceEx( h_module, type_upper, name_upper, (WORD)lang );
     else
-        hr= FindResource( h_module, name, type );
+        hr= FindResource( h_module, type_upper, name_upper );
 	if( hr==NULL ) {
         zend_error(E_WARNING, "res_get: find '%s/%s' failed: %s", type, name, win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN));
 		RETURN_FALSE;
@@ -156,17 +159,11 @@ PHP_FUNCTION(res_set)
 {
 	HANDLE h_module;
 	char *module, *type, *name, *data;
+	char *name_upper = NULL, *type_upper = NULL;
 	size_t module_len, type_len, name_len, data_len;
     char buffer[WIN32_STRERROR_BUFFER_LEN];
     size_t lang = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
 	zend_bool lang_isnull = 1;
-
-/* 	if( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ssss|l",
-		&module, &module_len,
-		&type, &type_len,
-		&name, &name_len,
-		&data, &data_len, &lang ) == FAILURE )
-		RETURN_FALSE; */
 
 	ZEND_PARSE_PARAMETERS_START(4, 5)
 		Z_PARAM_STRING(module, module_len)
@@ -177,47 +174,33 @@ PHP_FUNCTION(res_set)
         Z_PARAM_LONG_OR_NULL(lang, lang_isnull)
 	ZEND_PARSE_PARAMETERS_END();
 
-
-	//zend_error( E_WARNING, "res_set modifie res://%s/%s/%s avec %d octets",
-	//	module, type, name, data_len );
-
 	if( !module_len || !type_len || !name_len ) {
         zend_error(E_WARNING, "res_set: module file, type or name can't be empty" );
 		RETURN_FALSE;
 	}
 
-    // Convert name and type to uppercase since lowercase don't work
-    strupr(name);
-    strupr(type);
+	name_upper = (char *)_alloca(name_len + 1);
+	type_upper = (char *)_alloca(type_len + 1);
+	memcpy(name_upper, name, name_len + 1);
+	memcpy(type_upper, type, type_len + 1);
+    strupr(name_upper);
+    strupr(type_upper);
 
-	/**
-	* The UpdateResource function uses a LPVOID type to point to the data to be added. 
-	* This is essentially a pointer to any type, and it's a 32-bit pointer. 
-	* This means it can only address up to 4GB of memory. 
-	* So, if you're trying to add a 4GB+ file to an exe, you'll run into issues since UpdateResource won't be able to handle data of this size.
-	* 
-	* The maximum size of a Windows PE file (the format for .exe files) is 4GB.
-	* This is because the fields in the PE header that specify the size of the image are 32 bits.
-	* So even if you could get UpdateResource to handle a 4GB+ file, you wouldn't be able to add this to an exe because it would exceed the maximum file size.
-	* 
-	*/
     h_module= BeginUpdateResource( module, FALSE );
 	if( h_module==NULL ) {
         zend_error(E_WARNING, "res_set: error opening module: %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
 		RETURN_FALSE;
 	}
 
-
-	// Update resource. If passing NULL as data, resource will be deleted.
 	if(data == NULL || data_len == 0) {
-		if( UpdateResource( h_module, type, name, (WORD)lang, NULL, 0)==0 ) {
+		if( UpdateResource( h_module, type_upper, name_upper, (WORD)lang, NULL, 0)==0 ) {
 	        zend_error(E_WARNING, "res_set: error updating module(1): %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
 	        EndUpdateResource(h_module, TRUE);
 	        RETURN_FALSE;
 		}
 
 	} else {
-		if( UpdateResource( h_module, type, name, (WORD)lang, data, data_len )==0 ) {
+		if( UpdateResource( h_module, type_upper, name_upper, (WORD)lang, data, data_len )==0 ) {
 			zend_error(E_WARNING, "res_set: error updating module(2): %s", win32_strerror(buffer, WIN32_STRERROR_BUFFER_LEN) );
 			EndUpdateResource(h_module, TRUE);
 			RETURN_FALSE;
@@ -265,13 +248,12 @@ BOOL CALLBACK php_res_list_callback(
   LONG_PTR lParam        // application-defined parameter
 )
 {
-	char buffer[8];
-	int buffer_len = 8;
+	char buffer[32] = {0};
 	zval * array= (zval*) lParam;
 	if( !IS_INTRESOURCE(lpszName) )
 		add_next_index_string(array, lpszName);
 	else 	{
-		sprintf( buffer, "#%d", lpszName ); // debug
+		snprintf(buffer, sizeof(buffer), "#%llu", (unsigned long long)(ULONG_PTR)lpszName);
 		add_next_index_string(array, buffer);
 	}
 	return TRUE;
@@ -334,18 +316,17 @@ PHP_FUNCTION(res_list)
 BOOL CALLBACK php_res_list_type_callback(
   HMODULE hModule,  // resource-module handle
   LPTSTR lpszType,  // pointer to resource type
-  long long lParam       // application-defined parameter
+  LONG_PTR lParam       // application-defined parameter
 )
 {
 	zval * array;
-	char buffer[8];
-	int buffer_len = 8;
+	char buffer[32] = {0};
 	array= (zval*) lParam;
 
 	if( !IS_INTRESOURCE(lpszType) )
 		add_next_index_stringl(array, lpszType, strlen(lpszType));
 	else {
-		//sprintf( buffer, "#%d", lpszType ); // debug
+		snprintf(buffer, sizeof(buffer), "#%llu", (unsigned long long)(ULONG_PTR)lpszType);
 		add_next_index_stringl(array, buffer, strlen(buffer));
 	}
 
@@ -356,12 +337,11 @@ BOOL CALLBACK php_res_list_type_callback(
 BOOL CALLBACK php_res_list_type_string_callback(
   HMODULE hModule,  // resource-module handle
   LPTSTR lpszType,  // pointer to resource type
-  long long lParam       // application-defined parameter
+  LONG_PTR lParam       // application-defined parameter
 )
 {
 	zval * array;
-	char buffer[8];
-	int buffer_len = 8;
+	char buffer[32] = {0};
 
 	array= (zval*) lParam;
 
@@ -369,7 +349,7 @@ BOOL CALLBACK php_res_list_type_string_callback(
 		add_next_index_stringl(array, lpszType, strlen(lpszType));
         return TRUE;
     }
-#define RES_LIST_TYPE_STRING(type) case type: add_next_index_stringl(array, #type, strlen(type)); break;
+#define RES_LIST_TYPE_STRING(type) case type: add_next_index_stringl(array, #type, strlen(#type)); break;
 	switch( (DWORD64)lpszType ) {
         RES_LIST_TYPE_STRING(RT_CURSOR)
         RES_LIST_TYPE_STRING(RT_BITMAP)
@@ -392,7 +372,7 @@ BOOL CALLBACK php_res_list_type_string_callback(
         RES_LIST_TYPE_STRING(RT_ANIICON)
         RES_LIST_TYPE_STRING(RT_HTML)
 	default:
-		// sprintf( buffer, "#%d", lpszType ); //debug
+		snprintf(buffer, sizeof(buffer), "#%llu", (unsigned long long)(ULONG_PTR)lpszType);
 		add_next_index_stringl(array, buffer, strlen(buffer));
 		break;
 	}
@@ -428,9 +408,9 @@ PHP_FUNCTION(res_list_type)
 	array_init( return_value );
 
     if( !as_string ){
-        ret= EnumResourceTypes( h_module, php_res_list_type_callback, (long long)return_value );
+        ret= EnumResourceTypes( h_module, php_res_list_type_callback, (LONG_PTR)return_value );
     } else {
-        ret= EnumResourceTypes( h_module, php_res_list_type_string_callback, (long long)return_value );
+        ret= EnumResourceTypes( h_module, php_res_list_type_string_callback, (LONG_PTR)return_value );
     }
 
     if( !ret ) {
@@ -444,45 +424,47 @@ PHP_FUNCTION(res_list_type)
 /* }}} */
 
 
-/* {{{ proto bool res_exists(string type, string name[, int lang] )
-	Check if a resource exists in the actual module
+/* {{{ proto bool res_exists(resource module, string type, string name[, int lang] )
+	Check if a resource exists in an opened module
 	lang is experimental: 0 is neutral, 1 is user default, 2 is system default (see winnt.h LANG_* & SUBLANG_*).
 */
 PHP_FUNCTION(res_exists)
 {
 	char *name = NULL, *type = NULL;
-	size_t name_len, type_len, path_len;
+	char *name_upper = NULL, *type_upper = NULL;
+	size_t name_len, type_len;
 	size_t lang = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
 	zend_bool lang_isnull = 1;
 	BOOL ret;
-
-	char path[MAXPATHLEN];
-	DWORD pathsize;
+	zval *res_rc;
 
 	HMODULE h_module = NULL;
 	HRSRC hr;
 
-	ZEND_PARSE_PARAMETERS_START(2, 4)
-		Z_PARAM_STRING(path, path_len)
+	ZEND_PARSE_PARAMETERS_START(3, 4)
+		Z_PARAM_RESOURCE(res_rc)
 		Z_PARAM_STRING(type, type_len)
 		Z_PARAM_STRING(name, name_len)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG_OR_NULL(lang, lang_isnull)
 	ZEND_PARSE_PARAMETERS_END();
 
-	pathsize = GetModuleFileNameA(NULL, path, MAXPATHLEN);
-	path[pathsize] = 0;
+	if((h_module = (HMODULE)zend_fetch_resource(Z_RES_P(res_rc), le_res_resource_name, le_res_resource)) == NULL)
+		RETURN_FALSE;
 
-	h_module = LoadLibrary(path);
-	if(!h_module) RETURN_BOOL(FALSE);
+	name_upper = (char *)_alloca(name_len + 1);
+	type_upper = (char *)_alloca(type_len + 1);
+	memcpy(name_upper, name, name_len + 1);
+	memcpy(type_upper, type, type_len + 1);
+    strupr(name_upper);
+    strupr(type_upper);
 
-	if(lang_isnull) hr = FindResource(h_module, name, type);
-	else hr = FindResourceEx(h_module, name, type, (WORD)lang);
+	if(lang_isnull) hr = FindResource(h_module, type_upper, name_upper);
+	else hr = FindResourceEx(h_module, type_upper, name_upper, (WORD)lang);
 
 	if(hr) ret = TRUE;
 	else ret = FALSE;
 
-	FreeLibrary(h_module);
 	RETURN_BOOL(ret);
 }
 /* }}} */
