@@ -21,6 +21,10 @@
 #define PHP_WIN32STD_H
 
 
+#ifdef _MSC_VER
+#pragma warning(disable:4005) /* PHP_BUILD_SYSTEM is defined in multiple generated PHP headers */
+#endif
+
 #include "php.h"
 #include "php_ini.h"
 #include "zend_list.h"
@@ -70,7 +74,7 @@ PHP_FUNCTION(res_set);
 PHP_FUNCTION(res_exists);
 
  /* Res stream */
-php_stream *php_res_stream_open(php_stream_wrapper *wrapper, char *path, char *mode, int options, char **opened_path, php_stream_context *context STREAMS_DC);
+php_stream *php_res_stream_open(php_stream_wrapper *wrapper, const char *path, const char *mode, int options, zend_string **opened_path, php_stream_context *context STREAMS_DC);
 extern php_stream_ops php_res_stream_ops;
 extern php_stream_wrapper php_res_stream_wrapper;
 void _php_res_destruction_handler(zend_resource *rsrc);
